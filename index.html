@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portfolio</title>
+<style>
+  /* ── TOKENS ─────────────────────────────────────────────── */
+  :root {
+    --bg:        #0d1117;
+    --surface:   #161b22;
+    --border:    #30363d;
+    --accent:    #58a6ff;
+    --accent2:   #3fb950;
+    --muted:     #8b949e;
+    --text:      #e6edf3;
+    --text-dim:  #c9d1d9;
+    --danger:    #f85149;
+    --warn:      #d29922;
+    --card-bg:   #1c2128;
+    --radius:    10px;
+    --font-mono: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── SHARED ─────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border);
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    background: var(--surface); color: var(--text);
+    transition: background .15s, border-color .15s;
+  }
+  .btn:hover { background: #2d333b; border-color: var(--accent); }
+  .btn-primary { background: #238636; border-color: #2ea043; color: #fff; }
+  .btn-primary:hover { background: #2ea043; }
+  .btn-danger { background: #21262d; border-color: var(--danger); color: var(--danger); }
+  .btn-danger:hover { background: #2d1b1b; }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+
+  input, textarea, select {
+    width: 100%; padding: 8px 12px; border-radius: 6px;
+    border: 1px solid var(--border); background: #010409;
+    color: var(--text); font-size: 14px; font-family: inherit;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(88,166,255,.15); }
+
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+
+  .field { margin-bottom: 16px; }
+
+  .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 600;
+    background: rgba(56,139,253,.15); color: #58a6ff; border: 1px solid rgba(56,139,253,.3);
+  }
+
+  /* ── PAGE VIEWS ─────────────────────────────────────────── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ══════════════════════════════════════════════════════════
+     PUBLIC PORTFOLIO
+  ══════════════════════════════════════════════════════════ */
+
+  /* Top nav */
+  #nav {
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,17,23,.92); backdrop-filter: blur(12px);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between; height: 56px;
+  }
+  #nav .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; }
+  #nav .nav-logo svg { color: var(--text); }
+  #nav .nav-links { display: flex; gap: 20px; align-items: center; }
+  #nav .nav-links a { color: var(--muted); font-size: 14px; transition: color .15s; }
+  #nav .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+  /* Hero */
+  #hero {
+    max-width: 1100px; margin: 0 auto; padding: 80px 24px 60px;
+    display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+  }
+  .avatar-col { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .avatar-ring {
+    width: 200px; height: 200px; border-radius: 50%;
+    border: 4px solid var(--border); overflow: hidden;
+    background: linear-gradient(135deg, #1f6feb 0%, #388bfd 50%, #3fb950 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px; font-weight: 700; color: #fff; letter-spacing: -2px;
+  }
+  .social-links { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .social-link {
+    display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+    border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text-dim);
+    transition: background .15s, border-color .15s;
+  }
+  .social-link:hover { background: var(--surface); border-color: var(--accent); text-decoration: none; color: var(--text); }
+
+  .info-col {}
+  .greeting-banner {
+    font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 8px;
+  }
+  .display-name { font-size: 40px; font-weight: 800; line-height: 1.1; margin-bottom: 4px; }
+  .handle { font-size: 22px; font-weight: 300; color: var(--muted); margin-bottom: 16px; }
+  .bio-text { font-size: 16px; color: var(--text-dim); margin-bottom: 24px; max-width: 600px; line-height: 1.7; }
+  .meta-pills { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+  .meta-pill { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); }
+
+  /* Status streak */
+  .streak-bar {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px; margin-bottom: 24px;
+    font-size: 13px; color: var(--muted);
+  }
+  .streak-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ── SECTIONS ───────────────────────────────────────────── */
+  #main-content { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; display: grid; grid-template-columns: 1fr 340px; gap: 32px; }
+
+  .section-title {
+    font-size: 16px; font-weight: 700; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  }
+  .section-title svg { color: var(--muted); }
+
+  /* Pinned repos / project cards */
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
+  .project-card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; display: flex; flex-direction: column; gap: 8px;
+    transition: border-color .2s, transform .2s;
+  }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .project-card-name { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .project-card-desc { font-size: 12px; color: var(--muted); flex: 1; line-height: 1.5; }
+  .project-card-meta { display: flex; gap: 14px; font-size: 12px; color: var(--muted); }
+  .lang-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  /* Skills */
+  .skills-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+  .skill-row { display: flex; align-items: center; gap: 12px; }
+  .skill-name { width: 120px; font-size: 13px; color: var(--text-dim); flex-shrink: 0; }
+  .skill-bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .skill-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #1f6feb, #58a6ff); transition: width 1s cubic-bezier(.4,0,.2,1); }
+  .skill-val { width: 32px; font-size: 12px; color: var(--muted); text-align: right; font-family: var(--font-mono); }
+
+  /* Documents */
+  .docs-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+  .doc-card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+    transition: border-color .2s;
+  }
+  .doc-card:hover { border-color: var(--accent); }
+  .doc-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; background: var(--surface); }
+  .doc-meta { flex: 1; }
+  .doc-name { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .doc-size { font-size: 12px; color: var(--muted); }
+  .doc-dl { flex-shrink: 0; }
+
+  /* Contributions heatmap (decorative) */
+  .heatmap-wrap { margin-bottom: 32px; }
+  .heatmap-grid {
+    display: grid; grid-template-columns: repeat(52, 1fr); gap: 2px; margin-top: 10px;
+  }
+  .hcell {
+    width: 12px; height: 12px; border-radius: 2px; background: #161b22;
+  }
+
+  /* Sidebar */
+  .sidebar {}
+  .side-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; margin-bottom: 20px;
+  }
+  .side-card-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-box { text-align: center; }
+  .stat-num { font-size: 24px; font-weight: 700; display: block; }
+  .stat-lbl { font-size: 11px; color: var(--muted); }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border); text-align: center;
+    padding: 24px; font-size: 12px; color: var(--muted);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     LOGIN MODAL
+  ══════════════════════════════════════════════════════════ */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.72); z-index: 200;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 32px; width: 100%; max-width: 400px;
+    box-shadow: 0 24px 48px rgba(0,0,0,.6);
+    animation: slideUp .25s ease;
+  }
+  @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .modal-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+  .login-error { font-size: 13px; color: var(--danger); margin-top: -8px; margin-bottom: 12px; display: none; }
+  .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+  /* ══════════════════════════════════════════════════════════
+     ADMIN PANEL
+  ══════════════════════════════════════════════════════════ */
+  #admin-view {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: 56px 1fr;
+  }
+
+  /* Admin nav */
+  #admin-nav {
+    grid-column: 1 / -1;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+  }
+  #admin-nav .anav-left { display: flex; align-items: center; gap: 12px; font-weight: 700; }
+  .admin-badge { background: var(--accent); color: #000; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+
+  /* Admin sidebar */
+  #admin-sidebar {
+    background: var(--surface); border-right: 1px solid var(--border);
+    padding: 20px 12px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .a-nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px;
+    font-size: 14px; color: var(--muted); cursor: pointer; transition: background .15s, color .15s;
+    border: none; background: none; width: 100%; text-align: left;
+  }
+  .a-nav-item:hover { background: var(--card-bg); color: var(--text); }
+  .a-nav-item.active { background: rgba(88,166,255,.12); color: var(--accent); font-weight: 600; }
+
+  /* Admin main */
+  #admin-main {
+    padding: 32px; overflow-y: auto;
+  }
+  .admin-section { display: none; }
+  .admin-section.active { display: block; }
+  .admin-section-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .admin-section-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 2px dashed var(--border); border-radius: var(--radius);
+    padding: 48px; text-align: center; cursor: pointer; margin-bottom: 20px;
+    transition: border-color .2s, background .2s;
+    position: relative;
+  }
+  .upload-zone:hover, .upload-zone.dragging { border-color: var(--accent); background: rgba(88,166,255,.04); }
+  .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .upload-icon { font-size: 36px; margin-bottom: 12px; }
+  .upload-zone p { font-size: 14px; color: var(--muted); }
+
+  /* File list in admin */
+  .admin-file-list { display: flex; flex-direction: column; gap: 8px; }
+  .admin-file-row {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px;
+  }
+  .admin-file-icon { font-size: 20px; flex-shrink: 0; }
+  .admin-file-info { flex: 1; }
+  .admin-file-name { font-size: 14px; font-weight: 500; }
+  .admin-file-meta { font-size: 12px; color: var(--muted); }
+  .admin-file-actions { display: flex; gap: 6px; }
+
+  /* Skills admin */
+  .skill-admin-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .skill-admin-row {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px;
+  }
+  .skill-admin-name { flex: 1; font-size: 14px; }
+  .skill-admin-rating { display: flex; align-items: center; gap: 8px; }
+  .skill-admin-rating input[type="range"] {
+    width: 120px; padding: 0; border: none; background: none; accent-color: var(--accent);
+  }
+  .skill-admin-rating span { font-size: 14px; font-weight: 600; font-family: var(--font-mono); min-width: 24px; text-align: center; }
+
+  /* Add skill form */
+  .add-skill-form {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px; display: grid; grid-template-columns: 1fr 160px auto; gap: 12px; align-items: end;
+    margin-bottom: 24px;
+  }
+
+  /* Profile fields */
+  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 500;
+    background: var(--accent2); color: #000; padding: 12px 20px; border-radius: 8px;
+    font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    transform: translateY(80px); opacity: 0; transition: .3s;
+  }
+  #toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── RESPONSIVE ─────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    #hero { grid-template-columns: 1fr; }
+    .avatar-col { align-items: flex-start; flex-direction: row; }
+    .avatar-ring { width: 80px; height: 80px; font-size: 28px; }
+    #main-content { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    #admin-view { grid-template-columns: 1fr; }
+    #admin-sidebar { display: none; }
+  }
+
+  /* ── EMPTY STATES ───────────────────────────────────────── */
+  .empty-state {
+    text-align: center; padding: 48px 24px; color: var(--muted);
+    border: 1px dashed var(--border); border-radius: var(--radius);
+  }
+  .empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  /* Tabs (admin) */
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .tab-btn {
+    padding: 10px 18px; font-size: 14px; color: var(--muted); cursor: pointer;
+    border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+  }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+
+  /* Heatmap colors */
+  .h0 { background: #161b22; }
+  .h1 { background: #0e4429; }
+  .h2 { background: #006d32; }
+  .h3 { background: #26a641; }
+  .h4 { background: #39d353; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     PUBLIC PORTFOLIO VIEW
+═══════════════════════════════════════════════════════ -->
+<div id="public-view" class="view active">
+
+  <!-- Nav -->
+  <nav id="nav">
+    <div class="nav-logo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      Portfolio
+    </div>
+    <div class="nav-links">
+      <a href="#about-section">About</a>
+      <a href="#projects-section">Projects</a>
+      <a href="#skills-section">Skills</a>
+      <a href="#docs-section">Documents</a>
+      <button class="btn btn-sm" onclick="openLoginModal()">✏️ Edit Portfolio</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="about-section">
+    <div id="hero">
+      <div class="avatar-col">
+        <div class="avatar-ring" id="avatar-display">RR</div>
+        <div class="social-links" id="social-links-display">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+      <div class="info-col">
+        <div class="greeting-banner">👋 Welcome, visitor!</div>
+        <div class="display-name" id="pub-name">Rui Rui</div>
+        <div class="handle" id="pub-handle">@ruirui2</div>
+        <p class="bio-text" id="pub-bio">Full-stack developer & creative technologist. Building beautiful, performant software with clean code and intentional design. Open to collaboration.</p>
+        <div class="meta-pills" id="pub-meta">
+          <span class="meta-pill">📍 <span id="pub-location">San Francisco, CA</span></span>
+          <span class="meta-pill">💼 <span id="pub-company">Open to Work</span></span>
+          <span class="meta-pill">✉️ <span id="pub-email">hello@example.com</span></span>
+        </div>
+        <div class="streak-bar">
+          <div class="streak-dot"></div>
+          <span>Available for opportunities · Portfolio last updated <strong id="last-updated">today</strong></span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="document.getElementById('docs-section').scrollIntoView({behavior:'smooth'})">📄 View Resume</button>
+          <button class="btn" onclick="document.getElementById('projects-section').scrollIntoView({behavior:'smooth'})">🚀 See Projects</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main grid -->
+  <div id="main-content">
+    <div class="main-col">
+
+      <!-- Pinned Projects -->
+      <div id="projects-section">
+        <div class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+          Pinned Projects
+        </div>
+        <div class="projects-grid" id="projects-display">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <!-- Contribution heatmap (decorative) -->
+      <div class="heatmap-wrap">
+        <div class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Activity
+        </div>
+        <div class="heatmap-grid" id="heatmap"></div>
+      </div>
+
+      <!-- Skills -->
+      <div id="skills-section">
+        <div class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Technical Skills
+        </div>
+        <div class="skills-list" id="skills-display">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <!-- Documents -->
+      <div id="docs-section">
+        <div class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Documents & Files
+        </div>
+        <div class="docs-grid" id="docs-display">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+    </div><!-- /.main-col -->
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="side-card">
+        <div class="side-card-title">Quick Stats</div>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="stat-num" id="stat-repos">12</span><span class="stat-lbl">Repositories</span></div>
+          <div class="stat-box"><span class="stat-num" id="stat-commits">847</span><span class="stat-lbl">Commits</span></div>
+          <div class="stat-box"><span class="stat-num" id="stat-stars">64</span><span class="stat-lbl">Stars</span></div>
+          <div class="stat-box"><span class="stat-num" id="stat-skills">0</span><span class="stat-lbl">Skills</span></div>
+        </div>
+      </div>
+      <div class="side-card">
+        <div class="side-card-title">Languages</div>
+        <div id="lang-display" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+      <div class="side-card">
+        <div class="side-card-title">Currently Learning</div>
+        <div id="learning-display" style="font-size:14px;color:var(--text-dim);"></div>
+      </div>
+    </aside>
+
+  </div><!-- /#main-content -->
+
+  <footer>
+    <p>Built with ❤️ · Powered by GitHub Pages · <a href="#" onclick="openLoginModal();return false;">Admin</a></p>
+  </footer>
+
+</div><!-- /#public-view -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     ADMIN VIEW
+═══════════════════════════════════════════════════════ -->
+<div id="admin-view" class="view" style="display:none;">
+
+  <nav id="admin-nav">
+    <div class="anav-left">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      Portfolio Admin <span class="admin-badge">Admin</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:13px;color:var(--muted);">Logged in as <strong>ruirui2</strong></span>
+      <button class="btn btn-sm" onclick="viewPortfolio()">👁️ View Portfolio</button>
+      <button class="btn btn-sm btn-danger" onclick="logout()">Sign Out</button>
+    </div>
+  </nav>
+
+  <div id="admin-sidebar">
+    <button class="a-nav-item active" data-section="profile" onclick="switchAdminSection('profile',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Profile
+    </button>
+    <button class="a-nav-item" data-section="files" onclick="switchAdminSection('files',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Files & Documents
+    </button>
+    <button class="a-nav-item" data-section="skills" onclick="switchAdminSection('skills',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Skills
+    </button>
+    <button class="a-nav-item" data-section="projects" onclick="switchAdminSection('projects',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+      Projects
+    </button>
+    <button class="a-nav-item" data-section="settings" onclick="switchAdminSection('settings',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </button>
+  </div>
+
+  <div id="admin-main">
+
+    <!-- PROFILE SECTION -->
+    <div class="admin-section active" id="section-profile">
+      <div class="admin-section-title">Edit Profile</div>
+      <div class="admin-section-sub">Update your public-facing information displayed to all visitors.</div>
+      <div class="profile-grid">
+        <div class="field"><label>Display Name</label><input type="text" id="f-name" placeholder="Your Name" /></div>
+        <div class="field"><label>GitHub Handle</label><input type="text" id="f-handle" placeholder="@username" /></div>
+        <div class="field" style="grid-column:1/-1"><label>Bio / About</label><textarea id="f-bio" rows="4" placeholder="Tell visitors about yourself..."></textarea></div>
+        <div class="field"><label>Location</label><input type="text" id="f-location" placeholder="City, Country" /></div>
+        <div class="field"><label>Company / Status</label><input type="text" id="f-company" placeholder="e.g. Open to Work" /></div>
+        <div class="field" style="grid-column:1/-1"><label>Email</label><input type="email" id="f-email" placeholder="hello@example.com" /></div>
+        <div class="field"><label>GitHub URL</label><input type="text" id="f-github" placeholder="https://github.com/..." /></div>
+        <div class="field"><label>LinkedIn URL</label><input type="text" id="f-linkedin" placeholder="https://linkedin.com/in/..." /></div>
+        <div class="field"><label>Twitter / X URL</label><input type="text" id="f-twitter" placeholder="https://twitter.com/..." /></div>
+        <div class="field"><label>Website URL</label><input type="text" id="f-website" placeholder="https://yoursite.com" /></div>
+        <div class="field"><label>Currently Learning</label><input type="text" id="f-learning" placeholder="e.g. Rust, Machine Learning, ..." /></div>
+        <div class="field"><label>Languages (comma-separated)</label><input type="text" id="f-langs" placeholder="JavaScript, Python, Go, ..." /></div>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:10px;">
+        <button class="btn btn-primary" onclick="saveProfile()">💾 Save Profile</button>
+        <button class="btn" onclick="viewPortfolio()">👁️ Preview</button>
+      </div>
+    </div>
+
+    <!-- FILES SECTION -->
+    <div class="admin-section" id="section-files">
+      <div class="admin-section-title">Files & Documents</div>
+      <div class="admin-section-sub">Upload files to display on your portfolio. Visitors can view and download them.</div>
+
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="file-input" multiple accept=".pdf,.html,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif,.zip" onchange="handleFileUpload(this.files)" />
+        <div class="upload-icon">📁</div>
+        <p><strong>Click to upload</strong> or drag and drop</p>
+        <p style="margin-top:6px;">PDF, HTML, DOC, Images, ZIP supported</p>
+      </div>
+
+      <div class="admin-file-list" id="admin-file-list">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- SKILLS SECTION -->
+    <div class="admin-section" id="section-skills">
+      <div class="admin-section-title">Technical Skills</div>
+      <div class="admin-section-sub">Add skills and rate your expertise on a scale of 0–10.</div>
+
+      <div class="add-skill-form">
+        <div class="field" style="margin:0"><label>Skill Name</label><input type="text" id="new-skill-name" placeholder="e.g. JavaScript" /></div>
+        <div class="field" style="margin:0">
+          <label>Rating (0–10): <strong id="new-skill-val">5</strong></label>
+          <input type="range" id="new-skill-rating" min="0" max="10" value="5" oninput="document.getElementById('new-skill-val').textContent=this.value" style="width:100%;padding:0;border:none;background:none;accent-color:var(--accent);" />
+        </div>
+        <button class="btn btn-primary" onclick="addSkill()" style="height:38px;align-self:flex-end;">Add Skill</button>
+      </div>
+
+      <div class="skill-admin-list" id="skill-admin-list">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- PROJECTS SECTION -->
+    <div class="admin-section" id="section-projects">
+      <div class="admin-section-title">Pinned Projects</div>
+      <div class="admin-section-sub">Showcase up to 6 projects on your portfolio homepage.</div>
+
+      <div class="add-skill-form" style="grid-template-columns:1fr 1fr auto;">
+        <div class="field" style="margin:0"><label>Project Name</label><input type="text" id="new-proj-name" placeholder="My Awesome Project" /></div>
+        <div class="field" style="margin:0"><label>Description</label><input type="text" id="new-proj-desc" placeholder="Short description..." /></div>
+        <button class="btn btn-primary" onclick="addProject()" style="height:38px;align-self:flex-end;">Add</button>
+      </div>
+      <div class="field">
+        <label>GitHub Repo URL (optional)</label>
+        <input type="text" id="new-proj-url" placeholder="https://github.com/..." />
+      </div>
+      <div class="field">
+        <label>Language / Tech</label>
+        <input type="text" id="new-proj-lang" placeholder="e.g. JavaScript" />
+      </div>
+
+      <div class="admin-file-list" id="project-admin-list"></div>
+    </div>
+
+    <!-- SETTINGS SECTION -->
+    <div class="admin-section" id="section-settings">
+      <div class="admin-section-title">Settings</div>
+      <div class="admin-section-sub">Manage your portfolio configuration.</div>
+      <div class="side-card" style="max-width:500px;">
+        <div class="side-card-title">Data Management</div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">All portfolio data is stored in your browser's localStorage. Export a backup or reset everything.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn" onclick="exportData()">📥 Export JSON Backup</button>
+          <button class="btn btn-danger" onclick="resetData()">🗑️ Reset All Data</button>
+        </div>
+      </div>
+      <div class="side-card" style="max-width:500px;margin-top:16px;">
+        <div class="side-card-title">GitHub Pages Instructions</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;">
+          1. Create a repo named <strong style="color:var(--accent);">username.github.io</strong><br>
+          2. Upload <strong>index.html</strong> to the root<br>
+          3. Go to Settings → Pages → Deploy from main branch<br>
+          4. Your site will be live at <strong style="color:var(--accent2);">https://username.github.io</strong>
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /#admin-main -->
+</div><!-- /#admin-view -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     LOGIN MODAL
+═══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal-box">
+    <div class="modal-title">🔒 Admin Sign In</div>
+    <div class="modal-sub">Sign in to edit your portfolio.</div>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="Enter username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()" />
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
+    </div>
+    <div class="login-error" id="login-error">❌ Incorrect username or password.</div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeLoginModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="doLogin()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast">✅ Changes saved!</div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   DATABASE CREDENTIALS (hardcoded admin)
+════════════════════════════════════════════════════════ */
+const ADMIN_CREDS = { username: 'ruirui2', password: 'Cisco123' };
+
+/* ════════════════════════════════════════════════════════
+   DEFAULT DATA
+════════════════════════════════════════════════════════ */
+const DEFAULT_DATA = {
+  profile: {
+    name: 'Rui Rui',
+    handle: '@ruirui2',
+    bio: 'Full-stack developer & creative technologist. Building beautiful, performant software with clean code and intentional design. Open to collaboration.',
+    location: 'San Francisco, CA',
+    company: 'Open to Work',
+    email: 'hello@example.com',
+    github: 'https://github.com/ruirui2',
+    linkedin: '',
+    twitter: '',
+    website: '',
+    learning: 'System Design, Rust',
+    langs: 'JavaScript, Python, HTML/CSS'
+  },
+  skills: [
+    { name: 'JavaScript', rating: 8 },
+    { name: 'Python', rating: 7 },
+    { name: 'React', rating: 8 },
+    { name: 'Node.js', rating: 7 },
+    { name: 'Git', rating: 9 }
+  ],
+  files: [],
+  projects: [
+    { name: 'portfolio-site', desc: 'Personal portfolio built with vanilla HTML/CSS/JS, deployed on GitHub Pages.', lang: 'HTML', url: '#', color: '#f1e05a' },
+    { name: 'data-dashboard', desc: 'Real-time analytics dashboard with Chart.js and a REST API backend.', lang: 'JavaScript', url: '#', color: '#f7df1e' },
+    { name: 'cli-toolkit', desc: 'A collection of productivity command-line tools written in Python.', lang: 'Python', url: '#', color: '#3572A5' }
+  ]
+};
+
+/* ════════════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════════════ */
+let db = loadDB();
+let isAdmin = false;
+
+function loadDB() {
+  try {
+    const raw = localStorage.getItem('portfolio_db');
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+function saveDB() {
+  localStorage.setItem('portfolio_db', JSON.stringify(db));
+  showToast('Changes saved!');
+}
+
+/* ════════════════════════════════════════════════════════
+   LOGIN
+════════════════════════════════════════════════════════ */
+function openLoginModal() {
+  document.getElementById('login-modal').classList.add('open');
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-error').style.display = 'none';
+  setTimeout(() => document.getElementById('login-user').focus(), 100);
+}
+function closeLoginModal() {
+  document.getElementById('login-modal').classList.remove('open');
+}
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  if (u === ADMIN_CREDS.username && p === ADMIN_CREDS.password) {
+    isAdmin = true;
+    closeLoginModal();
+    showAdminPanel();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-pass').value = '';
+  }
+}
+function logout() {
+  isAdmin = false;
+  showPublicView();
+}
+
+/* ════════════════════════════════════════════════════════
+   VIEW SWITCHING
+════════════════════════════════════════════════════════ */
+function showPublicView() {
+  document.getElementById('public-view').style.display = 'block';
+  document.getElementById('admin-view').style.display = 'none';
+  renderPublic();
+}
+function showAdminPanel() {
+  document.getElementById('public-view').style.display = 'none';
+  document.getElementById('admin-view').style.display = 'grid';
+  populateAdminForms();
+  renderAdminFiles();
+  renderAdminSkills();
+  renderAdminProjects();
+}
+function viewPortfolio() {
+  document.getElementById('public-view').style.display = 'block';
+  document.getElementById('admin-view').style.display = 'none';
+  renderPublic();
+}
+
+/* ════════════════════════════════════════════════════════
+   ADMIN SECTIONS
+════════════════════════════════════════════════════════ */
+function switchAdminSection(id, btn) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  document.querySelectorAll('.a-nav-item').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ════════════════════════════════════════════════════════
+   PROFILE
+════════════════════════════════════════════════════════ */
+function populateAdminForms() {
+  const p = db.profile;
+  document.getElementById('f-name').value = p.name || '';
+  document.getElementById('f-handle').value = p.handle || '';
+  document.getElementById('f-bio').value = p.bio || '';
+  document.getElementById('f-location').value = p.location || '';
+  document.getElementById('f-company').value = p.company || '';
+  document.getElementById('f-email').value = p.email || '';
+  document.getElementById('f-github').value = p.github || '';
+  document.getElementById('f-linkedin').value = p.linkedin || '';
+  document.getElementById('f-twitter').value = p.twitter || '';
+  document.getElementById('f-website').value = p.website || '';
+  document.getElementById('f-learning').value = p.learning || '';
+  document.getElementById('f-langs').value = p.langs || '';
+}
+function saveProfile() {
+  db.profile = {
+    name: document.getElementById('f-name').value.trim() || 'Rui Rui',
+    handle: document.getElementById('f-handle').value.trim() || '@ruirui2',
+    bio: document.getElementById('f-bio').value.trim(),
+    location: document.getElementById('f-location').value.trim(),
+    company: document.getElementById('f-company').value.trim(),
+    email: document.getElementById('f-email').value.trim(),
+    github: document.getElementById('f-github').value.trim(),
+    linkedin: document.getElementById('f-linkedin').value.trim(),
+    twitter: document.getElementById('f-twitter').value.trim(),
+    website: document.getElementById('f-website').value.trim(),
+    learning: document.getElementById('f-learning').value.trim(),
+    langs: document.getElementById('f-langs').value.trim()
+  };
+  saveDB();
+}
+
+/* ════════════════════════════════════════════════════════
+   FILE UPLOAD
+════════════════════════════════════════════════════════ */
+function handleFileUpload(files) {
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const entry = {
+        id: Date.now() + Math.random(),
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        dataUrl: e.target.result,
+        uploadedAt: new Date().toISOString()
+      };
+      db.files.push(entry);
+      saveDB();
+      renderAdminFiles();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderAdminFiles() {
+  const list = document.getElementById('admin-file-list');
+  if (!db.files.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📂</div><p>No files uploaded yet. Use the area above to add documents.</p></div>';
+    return;
+  }
+  list.innerHTML = db.files.map(f => `
+    <div class="admin-file-row">
+      <div class="admin-file-icon">${fileIcon(f.name)}</div>
+      <div class="admin-file-info">
+        <div class="admin-file-name">${escHtml(f.name)}</div>
+        <div class="admin-file-meta">${formatBytes(f.size)} · Uploaded ${formatDate(f.uploadedAt)}</div>
+      </div>
+      <div class="admin-file-actions">
+        <a class="btn btn-sm" href="${f.dataUrl}" download="${escHtml(f.name)}">⬇ Download</a>
+        <button class="btn btn-sm btn-danger" onclick="deleteFile('${f.id}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteFile(id) {
+  db.files = db.files.filter(f => String(f.id) !== String(id));
+  saveDB();
+  renderAdminFiles();
+  renderPublic();
+}
+
+/* ════════════════════════════════════════════════════════
+   SKILLS
+════════════════════════════════════════════════════════ */
+function addSkill() {
+  const name = document.getElementById('new-skill-name').value.trim();
+  const rating = parseInt(document.getElementById('new-skill-rating').value);
+  if (!name) return alert('Please enter a skill name.');
+  db.skills.push({ name, rating, id: Date.now() });
+  document.getElementById('new-skill-name').value = '';
+  document.getElementById('new-skill-rating').value = 5;
+  document.getElementById('new-skill-val').textContent = '5';
+  saveDB();
+  renderAdminSkills();
+}
+
+function updateSkillRating(id, val) {
+  const sk = db.skills.find(s => String(s.id) === String(id));
+  if (sk) { sk.rating = parseInt(val); saveDB(); }
+}
+
+function deleteSkill(id) {
+  db.skills = db.skills.filter(s => String(s.id) !== String(id));
+  saveDB();
+  renderAdminSkills();
+}
+
+function renderAdminSkills() {
+  const list = document.getElementById('skill-admin-list');
+  if (!db.skills.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">⭐</div><p>No skills added yet.</p></div>';
+    return;
+  }
+  list.innerHTML = db.skills.map(s => `
+    <div class="skill-admin-row">
+      <div class="skill-admin-name">${escHtml(s.name)}</div>
+      <div class="skill-admin-rating">
+        <input type="range" min="0" max="10" value="${s.rating}"
+          oninput="this.nextElementSibling.textContent=this.value;updateSkillRating('${s.id}',this.value)"
+          style="width:140px;padding:0;border:none;background:none;accent-color:var(--accent);" />
+        <span style="font-size:14px;font-weight:600;min-width:20px;">${s.rating}</span>
+      </div>
+      <button class="btn btn-sm btn-danger" onclick="deleteSkill('${s.id}')">🗑</button>
+    </div>
+  `).join('');
+}
+
+/* ════════════════════════════════════════════════════════
+   PROJECTS
+════════════════════════════════════════════════════════ */
+const LANG_COLORS = {
+  'JavaScript':'#f1e05a','Python':'#3572A5','HTML':'#e34c26','CSS':'#563d7c',
+  'TypeScript':'#3178c6','Go':'#00ADD8','Rust':'#dea584','Java':'#b07219',
+  'C++':'#f34b7d','Ruby':'#701516','PHP':'#4F5D95','Swift':'#fa7343',
+  'Kotlin':'#A97BFF','Shell':'#89e051','Default':'#8b949e'
+};
+
+function addProject() {
+  const name = document.getElementById('new-proj-name').value.trim();
+  const desc = document.getElementById('new-proj-desc').value.trim();
+  const url = document.getElementById('new-proj-url').value.trim() || '#';
+  const lang = document.getElementById('new-proj-lang').value.trim() || 'Other';
+  if (!name) return alert('Please enter a project name.');
+  if (db.projects.length >= 6) return alert('Maximum 6 pinned projects allowed.');
+  const color = LANG_COLORS[lang] || LANG_COLORS['Default'];
+  db.projects.push({ id: Date.now(), name, desc, url, lang, color });
+  document.getElementById('new-proj-name').value = '';
+  document.getElementById('new-proj-desc').value = '';
+  document.getElementById('new-proj-url').value = '';
+  document.getElementById('new-proj-lang').value = '';
+  saveDB();
+  renderAdminProjects();
+}
+
+function deleteProject(id) {
+  db.projects = db.projects.filter(p => String(p.id) !== String(id));
+  saveDB();
+  renderAdminProjects();
+}
+
+function renderAdminProjects() {
+  const list = document.getElementById('project-admin-list');
+  if (!db.projects.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🚀</div><p>No projects added yet.</p></div>';
+    return;
+  }
+  list.innerHTML = db.projects.map(p => `
+    <div class="admin-file-row">
+      <div class="admin-file-icon">📦</div>
+      <div class="admin-file-info">
+        <div class="admin-file-name">${escHtml(p.name)}</div>
+        <div class="admin-file-meta">${escHtml(p.lang)} · ${escHtml(p.desc)}</div>
+      </div>
+      <div class="admin-file-actions">
+        <button class="btn btn-sm btn-danger" onclick="deleteProject('${p.id}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ════════════════════════════════════════════════════════
+   PUBLIC RENDER
+════════════════════════════════════════════════════════ */
+function renderPublic() {
+  const p = db.profile;
+
+  // Profile
+  document.getElementById('pub-name').textContent = p.name || 'Rui Rui';
+  document.getElementById('pub-handle').textContent = p.handle || '@ruirui2';
+  document.getElementById('pub-bio').textContent = p.bio || '';
+  document.getElementById('pub-location').textContent = p.location || '';
+  document.getElementById('pub-company').textContent = p.company || '';
+  document.getElementById('pub-email').textContent = p.email || '';
+  document.getElementById('last-updated').textContent = 'today';
+
+  // Avatar initials
+  const initials = (p.name || 'RR').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('avatar-display').textContent = initials;
+
+  // Social links
+  const socials = [];
+  if (p.github)   socials.push({ href: p.github,   icon: '🐙', label: 'GitHub' });
+  if (p.linkedin) socials.push({ href: p.linkedin,  icon: '💼', label: 'LinkedIn' });
+  if (p.twitter)  socials.push({ href: p.twitter,   icon: '🐦', label: 'Twitter / X' });
+  if (p.website)  socials.push({ href: p.website,   icon: '🌐', label: 'Website' });
+  if (p.email)    socials.push({ href: 'mailto:'+p.email, icon: '✉️', label: p.email });
+  document.getElementById('social-links-display').innerHTML = socials.map(s =>
+    `<a href="${escHtml(s.href)}" class="social-link" target="_blank">${s.icon} ${escHtml(s.label)}</a>`
+  ).join('');
+
+  // Meta
+  document.getElementById('pub-location').textContent = p.location || '';
+  document.getElementById('pub-company').textContent = p.company || '';
+
+  // Languages sidebar
+  const langs = (p.langs || '').split(',').map(l => l.trim()).filter(Boolean);
+  document.getElementById('lang-display').innerHTML = langs.map(l =>
+    `<span class="tag">${escHtml(l)}</span>`
+  ).join('');
+
+  // Learning
+  document.getElementById('learning-display').textContent = p.learning || '—';
+
+  // Skills
+  const skillsEl = document.getElementById('skills-display');
+  if (!db.skills.length) {
+    skillsEl.innerHTML = '<div class="empty-state"><div class="empty-state-icon">⭐</div><p>No skills added yet — admin can add them via Edit Portfolio.</p></div>';
+  } else {
+    skillsEl.innerHTML = db.skills.map(s => `
+      <div class="skill-row">
+        <div class="skill-name">${escHtml(s.name)}</div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" style="width:${s.rating*10}%"></div></div>
+        <div class="skill-val">${s.rating}/10</div>
+      </div>
+    `).join('');
+  }
+
+  // Stat — skills count
+  document.getElementById('stat-skills').textContent = db.skills.length;
+
+  // Documents
+  const docsEl = document.getElementById('docs-display');
+  if (!db.files.length) {
+    docsEl.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📂</div><p>No documents uploaded yet.</p></div>';
+  } else {
+    docsEl.innerHTML = db.files.map(f => `
+      <div class="doc-card">
+        <div class="doc-icon">${fileIcon(f.name)}</div>
+        <div class="doc-meta">
+          <div class="doc-name">${escHtml(f.name)}</div>
+          <div class="doc-size">${formatBytes(f.size)} · Uploaded ${formatDate(f.uploadedAt)}</div>
+        </div>
+        <div class="doc-dl">
+          <a class="btn btn-sm btn-primary" href="${f.dataUrl}" download="${escHtml(f.name)}">⬇ Download</a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Projects
+  const projEl = document.getElementById('projects-display');
+  if (!db.projects.length) {
+    projEl.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🚀</div><p>No projects pinned yet.</p></div>';
+  } else {
+    projEl.innerHTML = db.projects.map(p => `
+      <a class="project-card" href="${escHtml(p.url)}" target="_blank">
+        <div class="project-card-name">📦 ${escHtml(p.name)}</div>
+        <div class="project-card-desc">${escHtml(p.desc)}</div>
+        <div class="project-card-meta">
+          <span><span class="lang-dot" style="background:${p.color||'#8b949e'}"></span> ${escHtml(p.lang)}</span>
+          <span>⭐ ${Math.floor(Math.random()*50+2)}</span>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  // Heatmap (decorative seeded)
+  renderHeatmap();
+}
+
+function renderHeatmap() {
+  const grid = document.getElementById('heatmap');
+  const levels = ['h0','h1','h2','h3','h4'];
+  const cells = 52 * 7;
+  let html = '';
+  for (let i = 0; i < cells; i++) {
+    const r = Math.random();
+    let lvl = 'h0';
+    if (r > .75) lvl = 'h1';
+    if (r > .85) lvl = 'h2';
+    if (r > .92) lvl = 'h3';
+    if (r > .97) lvl = 'h4';
+    html += `<div class="hcell ${lvl}" title="Contributions"></div>`;
+  }
+  grid.innerHTML = html;
+}
+
+/* ════════════════════════════════════════════════════════
+   SETTINGS
+════════════════════════════════════════════════════════ */
+function exportData() {
+  const blob = new Blob([JSON.stringify(db, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'portfolio-backup.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+function resetData() {
+  if (!confirm('Reset ALL portfolio data to defaults? This cannot be undone.')) return;
+  db = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  localStorage.removeItem('portfolio_db');
+  populateAdminForms();
+  renderAdminFiles();
+  renderAdminSkills();
+  renderAdminProjects();
+  showToast('Data reset to defaults.');
+}
+
+/* ════════════════════════════════════════════════════════
+   DRAG & DROP
+════════════════════════════════════════════════════════ */
+const zone = document.getElementById('upload-zone');
+if (zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragging'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragging'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('dragging');
+    handleFileUpload(e.dataTransfer.files);
+  });
+}
+
+/* ════════════════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════════════════ */
+function showToast(msg = 'Saved!') {
+  const t = document.getElementById('toast');
+  t.textContent = '✅ ' + msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ════════════════════════════════════════════════════════
+   UTILS
+════════════════════════════════════════════════════════ */
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatBytes(b) {
+  if (!b) return '—';
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+  return (b/1048576).toFixed(1) + ' MB';
+}
+function formatDate(iso) {
+  try { return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); } catch(e){ return ''; }
+}
+function fileIcon(name) {
+  const ext = (name||'').split('.').pop().toLowerCase();
+  const map = {pdf:'📄',html:'🌐',htm:'🌐',doc:'📝',docx:'📝',txt:'📃',png:'🖼️',jpg:'🖼️',jpeg:'🖼️',gif:'🖼️',zip:'🗜️',mp4:'🎬',mp3:'🎵'};
+  return map[ext] || '📁';
+}
+
+/* ════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════ */
+renderPublic();
+</script>
+</body>
+</html>
