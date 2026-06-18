@@ -1,0 +1,41 @@
+{
+  "profile": {
+    "name": "Rui Rui",
+    "handle": "@ruirui2",
+    "bio": "High school developer building AI-powered tools, robotics systems, and cloud infrastructure. CCNA & AWS Cloud Practitioner certified. FIRST Robotics team lead.",
+    "location": "Seattle, WA",
+    "company": "Open to Tech Internships",
+    "email": "hello@example.com",
+    "github": "https://github.com/ruirui2",
+    "linkedin": "",
+    "twitter": "",
+    "website": "",
+    "learning": "Machine Learning, System Design, AWS Solutions Architect",
+    "langs": "Python, JavaScript, Java, C++",
+    "repoCount": 18,
+    "commitCount": 924,
+    "starCount": 47
+  },
+  "skills": [
+    { "id": 1, "name": "Python", "rating": 8 },
+    { "id": 2, "name": "JavaScript", "rating": 7 },
+    { "id": 3, "name": "AWS Cloud", "rating": 8 },
+    { "id": 4, "name": "Docker", "rating": 7 },
+    { "id": 5, "name": "Networking (CCNA)", "rating": 9 },
+    { "id": 6, "name": "Machine Learning", "rating": 7 },
+    { "id": 7, "name": "React", "rating": 6 },
+    { "id": 8, "name": "Linux", "rating": 8 }
+  ],
+  "projects": [
+    { "id": 1, "name": "OpenClaw AI", "desc": "AI-powered robotics vision system for FIRST Robotics using Python and OpenCV.", "lang": "Python", "url": "#", "color": "#3572A5" },
+    { "id": 2, "name": "MedVice NLP", "desc": "NLP medical advisory tool using BERT fine-tuning for symptom classification.", "lang": "Python", "url": "#", "color": "#3572A5" },
+    { "id": 3, "name": "AI Study Tool", "desc": "AI-powered AWS exam prep tool that improved classmates' pass rates significantly.", "lang": "JavaScript", "url": "#", "color": "#f1e05a" },
+    { "id": 4, "name": "Local AI Stack", "desc": "Self-hosted AI deployment using Ollama and Docker on local infrastructure.", "lang": "Shell", "url": "#", "color": "#89e051" }
+  ],
+  "files": [],
+  "experience": [],
+  "education": [],
+  "certifications": [],
+  "_version": 1,
+  "_source": "portfolio-data.json"
+}

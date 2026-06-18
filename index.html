@@ -4,1272 +4,1585 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
 <style>
-/* ── SPACE THEME TOKENS ────────────────────────────── */
+/* ═══════════════════════════════════════════════════════
+   TOKENS — space / void black theme
+═══════════════════════════════════════════════════════ */
 :root {
-  --void:      #000000;
-  --deep:      #050508;
-  --surface:   #0a0a12;
-  --card:      #0f0f1a;
-  --border:    #1a1a2e;
-  --border2:   #252540;
-  --accent:    #4fc3f7;
-  --accent2:   #7c4dff;
-  --star:      #c9a84c;
-  --green:     #00e676;
-  --red:       #ff5252;
-  --text:      #e8eaf6;
-  --dim:       #9e9ec8;
-  --muted:     #4a4a6a;
-  --mono:      'SFMono-Regular','Consolas',monospace;
-  --sans:      -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
-  --r:         10px;
+  --bg:       #000005;
+  --bg2:      #03030a;
+  --surface:  #080810;
+  --card:     #0c0c18;
+  --border:   #1a1a2e;
+  --border2:  #222240;
+  --accent:   #4f8cff;
+  --accent2:  #39d353;
+  --accent3:  #c9a84c;
+  --purple:   #9b72cf;
+  --cyan:     #06b6d4;
+  --muted:    #4a4a6a;
+  --text:     #d8d8f0;
+  --text-dim: #9090b8;
+  --danger:   #f85149;
+  --glow:     rgba(79,140,255,.18);
+  --r:        10px;
+  --ff:       'Outfit', sans-serif;
+  --fh:       'Syne', sans-serif;
+  --fm:       'JetBrains Mono', monospace;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--sans);background:var(--void);color:var(--text);
-  min-height:100vh;line-height:1.6;overflow-x:hidden;
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--ff);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
-/* Starfield bg */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+
+/* Stars background */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
   background:
-    radial-gradient(ellipse at 20% 20%, rgba(76,195,247,.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(124,77,255,.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 0%, rgba(201,168,76,.03) 0%, transparent 40%);
-}
-#app{position:relative;z-index:1}
-
-/* ── TYPOGRAPHY ────────────────────────────────────── */
-h1,h2,h3{font-weight:700;line-height:1.2}
-a{color:var(--accent);text-decoration:none}
-a:hover{text-decoration:underline}
-.mono{font-family:var(--mono)}
-
-/* ── SHARED COMPONENTS ─────────────────────────────── */
-.btn{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:8px 16px;border-radius:6px;border:1px solid var(--border2);
-  font-size:13px;font-weight:600;cursor:pointer;
-  background:var(--surface);color:var(--text);
-  transition:all .15s;font-family:var(--sans);
-}
-.btn:hover{border-color:var(--accent);background:#0d1428;box-shadow:0 0 12px rgba(79,195,247,.15)}
-.btn-primary{background:rgba(79,195,247,.12);border-color:rgba(79,195,247,.4);color:var(--accent)}
-.btn-primary:hover{background:rgba(79,195,247,.2);box-shadow:0 0 16px rgba(79,195,247,.25)}
-.btn-purple{background:rgba(124,77,255,.12);border-color:rgba(124,77,255,.4);color:#b39ddb}
-.btn-purple:hover{background:rgba(124,77,255,.2)}
-.btn-gold{background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.35);color:var(--star)}
-.btn-gold:hover{background:rgba(201,168,76,.18)}
-.btn-danger{background:rgba(255,82,82,.08);border-color:rgba(255,82,82,.3);color:var(--red)}
-.btn-danger:hover{background:rgba(255,82,82,.15)}
-.btn-green{background:rgba(0,230,118,.08);border-color:rgba(0,230,118,.3);color:var(--green)}
-.btn-sm{padding:5px 11px;font-size:12px}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-
-input,textarea,select{
-  width:100%;padding:8px 12px;border-radius:6px;
-  border:1px solid var(--border2);background:#020208;
-  color:var(--text);font-size:13px;font-family:inherit;outline:none;
-  transition:border-color .15s,box-shadow .15s;
-}
-input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,195,247,.1)}
-textarea{resize:vertical}
-label{display:block;font-size:12px;color:var(--dim);margin-bottom:4px;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
-.field{margin-bottom:14px}
-
-.glassy{
-  background:rgba(10,10,18,.8);border:1px solid var(--border);
-  backdrop-filter:blur(12px);
-}
-.card{
-  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
-  padding:20px;margin-bottom:16px;
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(79,140,255,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(155,114,207,.04) 0%, transparent 60%);
 }
 
-.tag{
-  display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;
-  background:rgba(79,195,247,.1);color:var(--accent);border:1px solid rgba(79,195,247,.2);
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* scrollbar */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px; }
+::-webkit-scrollbar-thumb:hover { background:var(--muted); }
+
+/* ── VIEWS ──────────────────────────────────────────── */
+.view { display:none; }
+.view.active { display:block; }
+
+/* ── SHARED COMPONENTS ──────────────────────────────── */
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:9px 18px; border-radius:8px; border:1px solid var(--border2);
+  font-size:13px; font-weight:600; cursor:pointer; letter-spacing:.02em;
+  background:var(--surface); color:var(--text); font-family:var(--ff);
+  transition:all .18s; position:relative; z-index:1;
 }
-.tag-purple{background:rgba(124,77,255,.1);color:#b39ddb;border-color:rgba(124,77,255,.2)}
-.tag-gold{background:rgba(201,168,76,.1);color:var(--star);border-color:rgba(201,168,76,.2)}
-.tag-green{background:rgba(0,230,118,.08);color:var(--green);border-color:rgba(0,230,118,.2)}
+.btn:hover { border-color:var(--accent); background:rgba(79,140,255,.08); color:var(--text); }
+.btn-primary { background:rgba(79,140,255,.15); border-color:rgba(79,140,255,.5); color:#8ab8ff; }
+.btn-primary:hover { background:rgba(79,140,255,.25); }
+.btn-green { background:rgba(57,211,83,.1); border-color:rgba(57,211,83,.4); color:var(--accent2); }
+.btn-green:hover { background:rgba(57,211,83,.2); }
+.btn-danger { background:rgba(248,81,73,.08); border-color:rgba(248,81,73,.3); color:var(--danger); }
+.btn-danger:hover { background:rgba(248,81,73,.15); }
+.btn-amber { background:rgba(201,168,76,.1); border-color:rgba(201,168,76,.35); color:var(--accent3); }
+.btn-amber:hover { background:rgba(201,168,76,.2); }
+.btn-sm { padding:5px 12px; font-size:12px; }
 
-.section-title{
-  font-size:14px;font-weight:700;margin-bottom:16px;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--dim);
-  display:flex;align-items:center;gap:8px;
-  padding-bottom:10px;border-bottom:1px solid var(--border);
+input, textarea, select {
+  width:100%; padding:10px 14px; border-radius:8px;
+  border:1px solid var(--border); background:var(--bg2);
+  color:var(--text); font-size:13px; font-family:var(--ff); outline:none;
+  transition:border-color .15s, box-shadow .15s;
 }
-.pulse{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;display:inline-block}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,230,118,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(0,230,118,0)}}
+input:focus, textarea:focus, select:focus {
+  border-color:var(--accent); box-shadow:0 0 0 3px rgba(79,140,255,.12);
+}
+input::placeholder, textarea::placeholder { color:var(--muted); }
 
-/* ── VIEWS ─────────────────────────────────────────── */
-.view{display:none}
-.view.active{display:block}
+label { display:block; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+.field { margin-bottom:18px; }
 
-/* ══════════════════════════════════════════════════════
+.tag {
+  display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:600;
+  background:rgba(79,140,255,.1); color:var(--accent); border:1px solid rgba(79,140,255,.25);
+}
+.tag-green { background:rgba(57,211,83,.1); color:var(--accent2); border-color:rgba(57,211,83,.25); }
+.tag-amber { background:rgba(201,168,76,.1); color:var(--accent3); border-color:rgba(201,168,76,.25); }
+.tag-purple { background:rgba(155,114,207,.1); color:var(--purple); border-color:rgba(155,114,207,.25); }
+
+.divider { height:1px; background:var(--border); margin:28px 0; }
+
+/* ═══════════════════════════════════════════════════════
    NAV
-══════════════════════════════════════════════════════ */
-#nav{
-  position:sticky;top:0;z-index:200;height:56px;
+═══════════════════════════════════════════════════════ */
+#nav {
+  position:sticky; top:0; z-index:100;
   border-bottom:1px solid var(--border);
-  background:rgba(0,0,0,.85);backdrop-filter:blur(16px);
-  display:flex;align-items:center;justify-content:space-between;padding:0 28px;
+  background:rgba(0,0,5,.88); backdrop-filter:blur(16px);
+  padding:0 28px;
+  display:flex; align-items:center; justify-content:space-between; height:58px;
 }
-.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;color:var(--text);letter-spacing:-.3px}
-.nav-logo .dot{color:var(--accent)}
-.nav-links{display:flex;gap:6px;align-items:center}
-.nav-links a{color:var(--dim);font-size:13px;padding:6px 10px;border-radius:6px;transition:all .15s}
-.nav-links a:hover{color:var(--text);background:var(--surface);text-decoration:none}
+.nav-logo {
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--fh); font-weight:800; font-size:17px; color:var(--text);
+  letter-spacing:-.3px;
+}
+.nav-logo .dot { width:8px; height:8px; border-radius:50%; background:var(--accent); animation:blink 2.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+.nav-links { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.nav-link {
+  padding:6px 14px; border-radius:7px; font-size:13px; color:var(--text-dim);
+  transition:all .15s; border:none; background:none; cursor:pointer; font-family:var(--ff);
+}
+.nav-link:hover { color:var(--text); background:rgba(255,255,255,.05); }
 
-/* ══════════════════════════════════════════════════════
-   HERO
-══════════════════════════════════════════════════════ */
-#hero{max-width:1100px;margin:0 auto;padding:72px 28px 48px;display:grid;grid-template-columns:200px 1fr;gap:52px;align-items:start}
-.avatar-col{display:flex;flex-direction:column;align-items:center;gap:12px}
-.avatar{
-  width:180px;height:180px;border-radius:50%;
+/* ═══════════════════════════════════════════════════════
+   PUBLIC — HERO
+═══════════════════════════════════════════════════════ */
+#hero {
+  max-width:1140px; margin:0 auto; padding:72px 28px 56px;
+  display:grid; grid-template-columns:220px 1fr; gap:52px; align-items:start;
+  position:relative; z-index:1;
+}
+.avatar-col { display:flex; flex-direction:column; align-items:center; gap:14px; }
+.avatar-ring {
+  width:196px; height:196px; border-radius:50%;
   border:2px solid var(--border2);
-  background:linear-gradient(135deg,#0d1428,#1a1a3e,#0a0a20);
-  display:flex;align-items:center;justify-content:center;
-  font-size:56px;font-weight:800;color:var(--accent);letter-spacing:-2px;font-family:var(--mono);
-  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#0a0a20,#1a1a40);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--fh); font-size:60px; font-weight:800; color:var(--accent);
+  box-shadow:0 0 40px rgba(79,140,255,.15), inset 0 0 40px rgba(79,140,255,.05);
+  position:relative; overflow:hidden;
 }
-.avatar::after{
-  content:'';position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(ellipse at 30% 30%, rgba(79,195,247,.15), transparent 60%);
+.avatar-ring::after {
+  content:''; position:absolute; inset:-1px;
+  border-radius:50%; border:1px solid transparent;
+  background:linear-gradient(135deg,var(--accent),var(--purple)) border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:destination-out; mask-composite:exclude;
 }
-.social-col{display:flex;flex-direction:column;gap:6px;width:100%}
-.soc-link{
-  display:flex;align-items:center;gap:8px;padding:8px 12px;
-  border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--dim);
-  transition:all .15s;
+.social-links { display:flex; flex-direction:column; gap:7px; width:100%; }
+.social-link {
+  display:flex; align-items:center; gap:8px; padding:8px 12px;
+  border:1px solid var(--border); border-radius:8px;
+  font-size:12px; color:var(--text-dim); transition:all .15s;
 }
-.soc-link:hover{border-color:var(--accent);color:var(--text);background:var(--surface);text-decoration:none;box-shadow:0 0 8px rgba(79,195,247,.1)}
+.social-link:hover { border-color:var(--accent); color:var(--text); background:rgba(79,140,255,.06); text-decoration:none; }
 
-.info-col{}
-.greeting{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.dname{font-size:38px;font-weight:800;line-height:1.1;margin-bottom:4px;color:var(--text)}
-.dname span{color:var(--accent)}
-.handle{font-size:18px;color:var(--muted);margin-bottom:14px;font-family:var(--mono)}
-.bio{font-size:15px;color:var(--dim);margin-bottom:20px;max-width:580px;line-height:1.75}
-.meta-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:22px}
-.meta-item{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--dim)}
-
-/* Status bar */
-.status-bar{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(0,230,118,.04);border:1px solid rgba(0,230,118,.15);
-  border-radius:8px;padding:10px 14px;margin-bottom:22px;font-size:13px;color:var(--dim);
+.info-col { position:relative; z-index:1; }
+.greeting { font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent2); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.greeting-wave { display:inline-block; animation:wave 2.5s ease infinite; transform-origin:70% 70%; }
+@keyframes wave { 0%,60%,100%{transform:rotate(0deg)} 10%,30%{transform:rotate(14deg)} 20%,40%{transform:rotate(-8deg)} 50%{transform:rotate(10deg)} }
+.display-name { font-family:var(--fh); font-size:42px; font-weight:800; line-height:1.05; margin-bottom:4px; letter-spacing:-.8px; }
+.display-name .name-accent { color:var(--accent); }
+.handle { font-size:20px; font-weight:300; color:var(--muted); margin-bottom:18px; font-family:var(--fm); }
+.bio-text { font-size:15px; color:var(--text-dim); margin-bottom:22px; max-width:580px; line-height:1.75; }
+.meta-pills { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:24px; }
+.meta-pill { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); }
+.meta-pill .mp-icon { font-size:14px; }
+.status-bar {
+  display:flex; align-items:center; gap:10px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:9px; padding:10px 16px; margin-bottom:24px;
+  font-size:13px; color:var(--muted);
 }
-.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.status-dot { width:8px; height:8px; border-radius:50%; background:var(--accent2); flex-shrink:0; animation:pulse 2.2s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(57,211,83,.4)} 50%{box-shadow:0 0 0 6px rgba(57,211,83,0)} }
+.hero-actions { display:flex; gap:10px; flex-wrap:wrap; }
 
-/* ══════════════════════════════════════════════════════
-   MAIN LAYOUT
-══════════════════════════════════════════════════════ */
-#main{max-width:1100px;margin:0 auto;padding:0 28px 80px;display:grid;grid-template-columns:1fr 300px;gap:32px}
-.main-col{}
-.sidebar{}
-.side-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:16px}
-.side-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
-
-/* ══════════════════════════════════════════════════════
-   PROJECTS
-══════════════════════════════════════════════════════ */
-.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
-.proj-card{
-  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
-  padding:16px;display:flex;flex-direction:column;gap:8px;
-  transition:all .2s;cursor:pointer;
+/* ═══════════════════════════════════════════════════════
+   PUBLIC — MAIN GRID
+═══════════════════════════════════════════════════════ */
+#pub-grid {
+  max-width:1140px; margin:0 auto; padding:0 28px 80px;
+  display:grid; grid-template-columns:1fr 320px; gap:32px;
+  position:relative; z-index:1;
 }
-.proj-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,195,247,.08)}
-.proj-name{font-size:14px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px}
-.proj-desc{font-size:12px;color:var(--dim);flex:1;line-height:1.55}
-.proj-meta{display:flex;gap:12px;font-size:12px;color:var(--muted)}
-.lang-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
 
-/* ══════════════════════════════════════════════════════
-   EXPERIENCE
-══════════════════════════════════════════════════════ */
-.exp-list{display:flex;flex-direction:column;gap:16px;margin-bottom:28px}
-.exp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;position:relative}
-.exp-card::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:2px;border-radius:1px;background:linear-gradient(to bottom,var(--accent),var(--accent2))}
-.exp-card{padding-left:20px}
-.exp-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px}
-.exp-role{font-size:15px;font-weight:700;color:var(--text)}
-.exp-period{font-size:12px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
-.exp-org{font-size:13px;color:var(--accent);margin-bottom:10px;font-style:italic}
-.exp-bullets{display:flex;flex-direction:column;gap:5px}
-.exp-bullet{display:flex;gap:8px;font-size:13px;color:var(--dim);line-height:1.5}
-.exp-bullet::before{content:'▸';color:var(--accent);flex-shrink:0;margin-top:1px}
-
-/* ══════════════════════════════════════════════════════
-   EDUCATION
-══════════════════════════════════════════════════════ */
-.edu-list{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
-.edu-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px}
-.edu-school{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
-.edu-degree{font-size:13px;color:var(--dim);margin-bottom:4px}
-.edu-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-
-/* ══════════════════════════════════════════════════════
-   SKILLS
-══════════════════════════════════════════════════════ */
-.skill-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
-.skill-row{display:flex;align-items:center;gap:12px}
-.skill-name{width:130px;font-size:13px;color:var(--dim);flex-shrink:0}
-.skill-track{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
-.skill-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width 1.2s cubic-bezier(.4,0,.2,1)}
-.skill-val{width:28px;font-size:11px;color:var(--muted);text-align:right;font-family:var(--mono)}
-
-/* ══════════════════════════════════════════════════════
-   DOCUMENTS
-══════════════════════════════════════════════════════ */
-.doc-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
-.doc-card{
-  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
-  padding:13px 16px;display:flex;align-items:center;gap:14px;transition:all .15s;
+.section-head {
+  font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:18px;
+  display:flex; align-items:center; gap:8px;
+  padding-bottom:10px; border-bottom:1px solid var(--border);
 }
-.doc-card:hover{border-color:var(--accent);box-shadow:0 0 10px rgba(79,195,247,.08)}
-.doc-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--surface);flex-shrink:0}
-.doc-info{flex:1}
-.doc-name{font-size:13px;font-weight:600;color:var(--accent)}
-.doc-meta{font-size:11px;color:var(--muted)}
+.section-head .sh-accent { color:var(--accent); }
 
-/* ══════════════════════════════════════════════════════
-   HEATMAP
-══════════════════════════════════════════════════════ */
-.heatmap{display:grid;grid-template-columns:repeat(52,1fr);gap:2px;margin-top:10px;margin-bottom:28px}
-.hc{width:100%;aspect-ratio:1;border-radius:2px}
-.h0{background:var(--border)}
-.h1{background:#0e4429}
-.h2{background:#006d32}
-.h3{background:#26a641}
-.h4{background:#39d353}
-
-/* ══════════════════════════════════════════════════════
-   SAR STORIES
-══════════════════════════════════════════════════════ */
-.sar-list{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
-.sar-card{background:var(--card);border:1px solid rgba(124,77,255,.2);border-radius:var(--r);padding:16px}
-.sar-ctx{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px}
-.sar-row{display:flex;gap:10px;margin-bottom:6px}
-.sar-label{font-size:11px;font-weight:700;color:var(--accent2);min-width:64px;flex-shrink:0;padding-top:2px;text-transform:uppercase;letter-spacing:.06em}
-.sar-val{font-size:13px;color:var(--dim);line-height:1.55}
-
-/* ══════════════════════════════════════════════════════
-   SIDEBAR STATS
-══════════════════════════════════════════════════════ */
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat-box{text-align:center}
-.stat-num{font-size:22px;font-weight:800;display:block;color:var(--text);font-family:var(--mono)}
-.stat-lbl{font-size:11px;color:var(--muted)}
-
-/* ══════════════════════════════════════════════════════
-   EMPTY STATE
-══════════════════════════════════════════════════════ */
-.empty{
-  text-align:center;padding:36px 20px;color:var(--muted);
-  border:1px dashed var(--border);border-radius:var(--r);
-  background:var(--card);
+/* Projects */
+.projects-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:32px; }
+.proj-card {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r);
+  padding:16px; display:flex; flex-direction:column; gap:8px;
+  transition:border-color .2s, transform .2s, box-shadow .2s; text-decoration:none; color:inherit;
 }
-.empty-ico{font-size:32px;margin-bottom:10px}
-.empty p{font-size:13px;margin-top:4px}
+.proj-card:hover { border-color:var(--accent); transform:translateY(-3px); box-shadow:0 8px 30px rgba(79,140,255,.12); text-decoration:none; }
+.proj-card-name { font-size:14px; font-weight:600; color:var(--accent); font-family:var(--fh); }
+.proj-card-desc { font-size:12px; color:var(--text-dim); flex:1; line-height:1.55; }
+.proj-card-foot { display:flex; gap:14px; font-size:12px; color:var(--muted); align-items:center; }
+.lang-dot { width:10px; height:10px; border-radius:50%; display:inline-block; flex-shrink:0; }
 
-/* ══════════════════════════════════════════════════════
-   FOOTER
-══════════════════════════════════════════════════════ */
-footer{border-top:1px solid var(--border);text-align:center;padding:24px;font-size:12px;color:var(--muted)}
+/* Experience */
+.exp-list { display:flex; flex-direction:column; gap:14px; margin-bottom:32px; }
+.exp-card {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:18px;
+  display:flex; gap:14px; align-items:flex-start;
+}
+.exp-icon { width:38px; height:38px; border-radius:9px; background:var(--surface); border:1px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.exp-body { flex:1; }
+.exp-role { font-size:14px; font-weight:700; color:var(--text); }
+.exp-org { font-size:13px; color:var(--accent3); font-weight:600; }
+.exp-period { font-size:11px; color:var(--muted); font-family:var(--fm); }
+.exp-bullets { margin-top:8px; display:flex; flex-direction:column; gap:4px; }
+.exp-bullet { font-size:12px; color:var(--text-dim); display:flex; gap:7px; align-items:flex-start; line-height:1.5; }
+.exp-bullet::before { content:'▸'; color:var(--accent); flex-shrink:0; font-size:11px; margin-top:2px; }
 
-/* ══════════════════════════════════════════════════════
+/* Education */
+.edu-list { display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
+.edu-card {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:16px;
+}
+.edu-school { font-size:14px; font-weight:700; color:var(--text); }
+.edu-degree { font-size:13px; color:var(--text-dim); margin:2px 0; }
+.edu-meta { font-size:12px; color:var(--muted); font-family:var(--fm); }
+.edu-honors { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+
+/* Skills bars */
+.skills-list { display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
+.skill-row { display:flex; align-items:center; gap:12px; }
+.skill-name { width:140px; font-size:13px; color:var(--text-dim); flex-shrink:0; }
+.skill-track { flex:1; height:7px; background:var(--border); border-radius:999px; overflow:hidden; }
+.skill-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#1f3faf,var(--accent)); transition:width 1.2s cubic-bezier(.4,0,.2,1); }
+.skill-val { width:36px; font-size:11px; color:var(--muted); text-align:right; font-family:var(--fm); }
+
+/* Documents */
+.docs-list { display:flex; flex-direction:column; gap:9px; margin-bottom:32px; }
+.doc-card {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r);
+  padding:13px 16px; display:flex; align-items:center; gap:12px;
+  transition:border-color .2s;
+}
+.doc-card:hover { border-color:var(--accent); }
+.doc-icon { font-size:22px; flex-shrink:0; }
+.doc-info { flex:1; }
+.doc-name { font-size:13px; font-weight:600; color:var(--accent); }
+.doc-meta { font-size:11px; color:var(--muted); }
+
+/* Heatmap */
+.heatmap-grid { display:grid; grid-template-columns:repeat(52,1fr); gap:2px; margin-top:10px; }
+.hc { width:12px; height:12px; border-radius:2px; }
+.h0 { background:var(--surface); }
+.h1 { background:#0e3420; }
+.h2 { background:#006d32; }
+.h3 { background:#26a641; }
+.h4 { background:var(--accent2); }
+
+/* Certifications */
+.cert-list { display:flex; flex-direction:column; gap:9px; margin-bottom:32px; }
+.cert-card {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r);
+  padding:13px 16px; display:flex; align-items:center; gap:12px;
+}
+.cert-badge { width:38px; height:38px; border-radius:9px; background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.3); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.cert-name { font-size:13px; font-weight:600; color:var(--accent3); }
+.cert-issuer { font-size:11px; color:var(--muted); }
+
+/* Sidebar */
+.sidebar {}
+.side-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--r);
+  padding:18px; margin-bottom:18px;
+}
+.side-title { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.stat-box { text-align:center; padding:12px 8px; background:var(--card); border-radius:8px; border:1px solid var(--border); }
+.stat-num { font-size:22px; font-weight:800; font-family:var(--fh); display:block; color:var(--text); }
+.stat-lbl { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+
+/* ═══════════════════════════════════════════════════════
    LOGIN MODAL
-══════════════════════════════════════════════════════ */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.overlay.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:32px;width:100%;max-width:400px;box-shadow:0 32px 64px rgba(0,0,0,.8);animation:up .22s ease}
-@keyframes up{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-title{font-size:20px;font-weight:800;margin-bottom:6px}
-.modal-sub{font-size:13px;color:var(--dim);margin-bottom:22px}
-.modal-err{font-size:12px;color:var(--red);margin-bottom:12px;display:none}
-.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+═══════════════════════════════════════════════════════ */
+.overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,5,.85); z-index:300;
+  align-items:center; justify-content:center; backdrop-filter:blur(8px);
+}
+.overlay.open { display:flex; }
+.modal {
+  background:var(--surface); border:1px solid var(--border2); border-radius:14px;
+  padding:36px; width:100%; max-width:400px;
+  box-shadow:0 32px 64px rgba(0,0,0,.8), 0 0 0 1px rgba(79,140,255,.08);
+  animation:slideUp .22s ease;
+}
+@keyframes slideUp { from{transform:translateY(18px);opacity:0} to{transform:translateY(0);opacity:1} }
+.modal-title { font-family:var(--fh); font-size:20px; font-weight:800; margin-bottom:6px; }
+.modal-sub { font-size:13px; color:var(--muted); margin-bottom:24px; }
+.modal-foot { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
+.login-err { font-size:12px; color:var(--danger); display:none; margin-top:-6px; margin-bottom:10px; }
 
-/* ══════════════════════════════════════════════════════
-   ADMIN
-══════════════════════════════════════════════════════ */
-#admin-view{min-height:100vh;display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr}
-#admin-nav{
-  grid-column:1/-1;background:rgba(0,0,0,.9);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;padding:0 24px;backdrop-filter:blur(12px);
+/* ═══════════════════════════════════════════════════════
+   ADMIN PANEL
+═══════════════════════════════════════════════════════ */
+#admin-view {
+  height:100vh; overflow:hidden;
+  display:grid; grid-template-columns:220px 1fr; grid-template-rows:56px 1fr;
 }
-.abadge{background:var(--accent);color:#000;font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px}
-#admin-sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
-.a-item{
-  display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:8px;
-  font-size:13px;color:var(--dim);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all .15s;
+#admin-nav {
+  grid-column:1/-1;
+  background:var(--surface); border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; padding:0 24px;
 }
-.a-item:hover{background:var(--card);color:var(--text)}
-.a-item.active{background:rgba(79,195,247,.1);color:var(--accent);font-weight:600}
-#admin-main{padding:28px;overflow-y:auto}
-.asec{display:none}
-.asec.active{display:block}
-.asec-title{font-size:20px;font-weight:800;margin-bottom:4px}
-.asec-sub{font-size:13px;color:var(--dim);margin-bottom:24px}
+.anav-left { display:flex; align-items:center; gap:10px; font-family:var(--fh); font-weight:700; font-size:15px; }
+.admin-badge { background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:2px 7px; border-radius:4px; text-transform:uppercase; letter-spacing:.06em; }
+.anav-right { display:flex; align-items:center; gap:8px; }
+.anav-user { font-size:12px; color:var(--muted); font-family:var(--fm); }
+
+#admin-sidebar {
+  background:var(--surface); border-right:1px solid var(--border);
+  padding:18px 10px; display:flex; flex-direction:column; gap:3px;
+  overflow-y:auto;
+}
+.a-nav-item {
+  display:flex; align-items:center; gap:9px; padding:10px 12px; border-radius:8px;
+  font-size:13px; color:var(--muted); cursor:pointer; border:none; background:none;
+  width:100%; text-align:left; font-family:var(--ff); transition:all .15s;
+}
+.a-nav-item:hover { background:var(--card); color:var(--text); }
+.a-nav-item.active { background:rgba(79,140,255,.12); color:var(--accent); font-weight:600; border-left:2px solid var(--accent); }
+
+#admin-main { overflow-y:auto; padding:32px; }
+.asec { display:none; }
+.asec.active { display:block; }
+.asec-title { font-family:var(--fh); font-size:22px; font-weight:800; margin-bottom:4px; }
+.asec-sub { font-size:13px; color:var(--muted); margin-bottom:28px; line-height:1.6; }
 
 /* Upload zone */
-.drop-zone{
-  border:2px dashed var(--border2);border-radius:var(--r);padding:44px;text-align:center;
-  cursor:pointer;margin-bottom:16px;transition:all .2s;position:relative;
+.upload-zone {
+  border:2px dashed var(--border2); border-radius:var(--r);
+  padding:44px; text-align:center; cursor:pointer; margin-bottom:18px;
+  transition:all .2s; position:relative;
 }
-.drop-zone:hover,.drop-zone.drag{border-color:var(--accent);background:rgba(79,195,247,.03)}
-.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
-.drop-zone p{font-size:13px;color:var(--dim);margin-top:6px}
+.upload-zone:hover, .upload-zone.drag { border-color:var(--accent); background:rgba(79,140,255,.04); }
+.upload-zone input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+.uz-icon { font-size:36px; margin-bottom:12px; }
+.uz-text { font-size:14px; color:var(--muted); }
+.uz-sub { font-size:12px; color:var(--muted); margin-top:5px; opacity:.7; }
 
-/* Admin file list */
-.a-file-row{
-  display:flex;align-items:center;gap:12px;
-  background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;
+/* Admin rows */
+.a-list { display:flex; flex-direction:column; gap:8px; }
+.a-row {
+  display:flex; align-items:center; gap:12px;
+  background:var(--card); border:1px solid var(--border); border-radius:9px; padding:13px 16px;
 }
-.a-file-info{flex:1}
-.a-file-name{font-size:13px;font-weight:600;color:var(--text)}
-.a-file-meta{font-size:11px;color:var(--muted)}
+.a-row-icon { font-size:20px; flex-shrink:0; }
+.a-row-info { flex:1; min-width:0; }
+.a-row-name { font-size:13px; font-weight:600; color:var(--text); }
+.a-row-meta { font-size:11px; color:var(--muted); }
+.a-row-actions { display:flex; gap:6px; flex-shrink:0; }
 
 /* Skill admin */
-.skill-a-row{
-  display:flex;align-items:center;gap:12px;
-  background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 14px;margin-bottom:8px;
-}
-.skill-a-name{flex:1;font-size:13px}
-.add-row{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:grid;grid-template-columns:1fr 180px auto;gap:10px;align-items:end;margin-bottom:16px}
-.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.pgrid .full{grid-column:1/-1}
+.skill-a-rating { display:flex; align-items:center; gap:8px; }
+.skill-a-rating input[type="range"] { width:120px; padding:0; border:none; background:none; accent-color:var(--accent); }
+.skill-a-val { font-family:var(--fm); font-size:13px; font-weight:600; min-width:22px; text-align:center; color:var(--accent); }
 
-/* Import panel */
-.import-panel{background:rgba(79,195,247,.04);border:1px solid rgba(79,195,247,.15);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.import-panel h3{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:6px}
-.import-panel p{font-size:12px;color:var(--dim);margin-bottom:12px;line-height:1.6}
+/* Add form strip */
+.add-strip {
+  display:grid; gap:10px; align-items:end;
+  background:var(--card); border:1px solid var(--border2); border-radius:var(--r);
+  padding:18px; margin-bottom:20px;
+}
+.add-strip-2 { grid-template-columns:1fr 180px auto; }
+.add-strip-3 { grid-template-columns:1fr 1fr 1fr auto; }
+.add-strip-4 { grid-template-columns:1fr 1fr; }
+.add-strip .field { margin:0; }
+
+/* Profile grid */
+.profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
+/* Import/Export box */
+.io-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:24px; }
+.io-card {
+  background:var(--card); border:1px solid var(--border2); border-radius:var(--r); padding:20px;
+}
+.io-card-title { font-size:14px; font-weight:700; margin-bottom:6px; }
+.io-card-desc { font-size:12px; color:var(--muted); margin-bottom:14px; line-height:1.6; }
+.io-zone {
+  border:1px dashed var(--border2); border-radius:8px;
+  padding:18px; text-align:center; cursor:pointer; position:relative;
+  transition:all .18s; margin-bottom:10px;
+}
+.io-zone:hover { border-color:var(--accent); background:rgba(79,140,255,.04); }
+.io-zone input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
 
 /* Toast */
-#toast{
-  position:fixed;bottom:24px;right:24px;z-index:999;
-  background:var(--green);color:#000;padding:11px 18px;border-radius:8px;
-  font-size:13px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.5);
-  transform:translateY(80px);opacity:0;transition:.3s;pointer-events:none;
+#toast {
+  position:fixed; bottom:24px; right:24px; z-index:999;
+  padding:12px 20px; border-radius:9px; font-size:13px; font-weight:700;
+  background:rgba(57,211,83,.15); border:1px solid rgba(57,211,83,.4); color:var(--accent2);
+  box-shadow:0 8px 24px rgba(0,0,0,.5);
+  transform:translateY(70px); opacity:0; transition:.28s ease; pointer-events:none;
 }
-#toast.show{transform:translateY(0);opacity:1}
-#toast.err{background:var(--red)}
+#toast.show { transform:translateY(0); opacity:1; }
+#toast.err { background:rgba(248,81,73,.12); border-color:rgba(248,81,73,.3); color:var(--danger); }
+
+/* Footer */
+footer {
+  border-top:1px solid var(--border); text-align:center;
+  padding:22px; font-size:12px; color:var(--muted); position:relative; z-index:1;
+}
 
 /* Responsive */
-@media(max-width:900px){
-  #hero{grid-template-columns:1fr;padding:40px 16px 32px}
-  #main{grid-template-columns:1fr;padding:0 16px 60px}
-  .proj-grid{grid-template-columns:1fr}
-  #admin-view{grid-template-columns:1fr}
-  #admin-sidebar{display:none}
+@media(max-width:860px){
+  #hero { grid-template-columns:1fr; }
+  #pub-grid { grid-template-columns:1fr; }
+  .projects-grid { grid-template-columns:1fr; }
+  #admin-view { grid-template-columns:1fr; grid-template-rows:56px auto 1fr; }
+  #admin-sidebar { display:none; }
+  .profile-grid { grid-template-columns:1fr; }
+  .io-grid { grid-template-columns:1fr; }
+  .add-strip-3 { grid-template-columns:1fr 1fr; }
 }
+
+.empty {
+  text-align:center; padding:36px 24px; color:var(--muted);
+  border:1px dashed var(--border); border-radius:var(--r);
+}
+.empty-icon { font-size:36px; margin-bottom:10px; }
+.empty p { font-size:13px; }
+
+/* Import source indicator */
+.import-src { font-size:11px; font-family:var(--fm); color:var(--muted); opacity:.7; margin-top:-20px; margin-bottom:24px; }
 </style>
 </head>
 <body>
-<div id="app">
 
-<!-- ══════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════
      PUBLIC VIEW
-══════════════════════════════════════════════════════ -->
+═══════════════════════════════════════════════════════ -->
 <div id="public-view" class="view active">
 
   <nav id="nav">
-    <div class="nav-logo">rui<span class="dot">.</span>dev</div>
+    <div class="nav-logo">
+      <div class="dot"></div>
+      <span id="nav-name">Portfolio</span>
+    </div>
     <div class="nav-links">
-      <a href="#exp-sec">Experience</a>
-      <a href="#edu-sec">Education</a>
-      <a href="#skill-sec">Skills</a>
-      <a href="#doc-sec">Documents</a>
-      <a href="#sar-sec">Stories</a>
-      <button class="btn btn-sm btn-primary" onclick="openLogin()">✏️ Edit</button>
+      <button class="nav-link" onclick="scrollTo('about-section')">About</button>
+      <button class="nav-link" onclick="scrollTo('exp-section')">Experience</button>
+      <button class="nav-link" onclick="scrollTo('projects-section')">Projects</button>
+      <button class="nav-link" onclick="scrollTo('skills-section')">Skills</button>
+      <button class="nav-link" onclick="scrollTo('docs-section')">Docs</button>
+      <button class="btn btn-primary btn-sm" onclick="openLogin()">✏️ Edit</button>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section id="about-sec">
+  <!-- Hero -->
+  <section id="about-section">
     <div id="hero">
       <div class="avatar-col">
-        <div class="avatar" id="p-avatar">RR</div>
-        <div class="social-col" id="p-socials"></div>
+        <div class="avatar-ring" id="pub-avatar">RR</div>
+        <div class="social-links" id="pub-socials"></div>
       </div>
       <div class="info-col">
-        <div class="greeting"><span class="pulse"></span> Welcome, visitor</div>
-        <div class="dname" id="p-name">Loading<span>...</span></div>
-        <div class="handle" id="p-handle">@ruirui2</div>
-        <div class="bio" id="p-bio"></div>
-        <div class="meta-row" id="p-meta"></div>
+        <div class="greeting"><span class="greeting-wave">👋</span> Welcome to my portfolio</div>
+        <div class="display-name" id="pub-name">Rui <span class="name-accent">Rui</span></div>
+        <div class="handle" id="pub-handle">@ruirui2</div>
+        <p class="bio-text" id="pub-bio">Loading…</p>
+        <div class="meta-pills" id="pub-meta"></div>
         <div class="status-bar">
-          <span class="pulse"></span>
-          <span id="p-status">Portfolio last updated <strong id="p-updated">—</strong></span>
+          <div class="status-dot"></div>
+          <span id="pub-status">Available for opportunities</span>
         </div>
         <div class="hero-actions">
-          <button class="btn btn-primary" onclick="scrollTo('doc-sec')">📄 View Resume</button>
-          <button class="btn btn-purple" onclick="scrollTo('exp-sec')">💼 Experience</button>
-          <button class="btn btn-gold" onclick="scrollTo('skill-sec')">⚡ Skills</button>
+          <button class="btn btn-green" onclick="scrollTo('docs-section')">📄 Resume</button>
+          <button class="btn btn-primary" onclick="scrollTo('projects-section')">🚀 Projects</button>
+          <button class="btn" onclick="scrollTo('skills-section')">⭐ Skills</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- MAIN GRID -->
-  <div id="main">
-    <div class="main-col">
-
-      <!-- Projects -->
-      <div id="proj-sec">
-        <div class="section-title">📦 Pinned Projects</div>
-        <div class="proj-grid" id="p-projects"></div>
-      </div>
+  <!-- Main grid -->
+  <div id="pub-grid">
+    <div class="pub-main">
 
       <!-- Experience -->
-      <div id="exp-sec">
-        <div class="section-title">💼 Experience</div>
-        <div class="exp-list" id="p-experience"></div>
+      <div id="exp-section">
+        <div class="section-head"><span class="sh-accent">▸</span> Experience &amp; Projects</div>
+        <div class="exp-list" id="pub-exp"></div>
       </div>
 
       <!-- Education -->
-      <div id="edu-sec">
-        <div class="section-title">🎓 Education</div>
-        <div class="edu-list" id="p-education"></div>
+      <div id="edu-section" style="margin-bottom:32px;">
+        <div class="section-head"><span class="sh-accent">▸</span> Education</div>
+        <div class="edu-list" id="pub-edu"></div>
+      </div>
+
+      <!-- Pinned Projects -->
+      <div id="projects-section" style="margin-bottom:32px;">
+        <div class="section-head"><span class="sh-accent">▸</span> Pinned Repositories</div>
+        <div class="projects-grid" id="pub-projects"></div>
+      </div>
+
+      <!-- Certifications -->
+      <div id="cert-section" style="margin-bottom:32px;">
+        <div class="section-head"><span class="sh-accent">▸</span> Certifications</div>
+        <div class="cert-list" id="pub-certs"></div>
       </div>
 
       <!-- Skills -->
-      <div id="skill-sec">
-        <div class="section-title">⚡ Technical Skills</div>
-        <div class="skill-list" id="p-skills"></div>
-      </div>
-
-      <!-- SAR Stories -->
-      <div id="sar-sec">
-        <div class="section-title">📖 Project Stories (SAR)</div>
-        <div class="sar-list" id="p-sar"></div>
-      </div>
-
-      <!-- Heatmap -->
-      <div>
-        <div class="section-title">📈 Activity</div>
-        <div class="heatmap" id="p-heatmap"></div>
+      <div id="skills-section" style="margin-bottom:32px;">
+        <div class="section-head"><span class="sh-accent">▸</span> Technical Skills</div>
+        <div class="skills-list" id="pub-skills"></div>
       </div>
 
       <!-- Documents -->
-      <div id="doc-sec">
-        <div class="section-title">📄 Documents &amp; Files</div>
-        <div class="doc-list" id="p-docs"></div>
+      <div id="docs-section" style="margin-bottom:32px;">
+        <div class="section-head"><span class="sh-accent">▸</span> Documents &amp; Files</div>
+        <div class="docs-list" id="pub-docs"></div>
       </div>
 
-    </div><!-- /.main-col -->
+      <!-- Contribution heatmap -->
+      <div style="margin-bottom:32px;">
+        <div class="section-head"><span class="sh-accent">▸</span> Activity</div>
+        <div class="heatmap-grid" id="heatmap"></div>
+      </div>
 
-    <!-- SIDEBAR -->
+    </div>
+
+    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="side-card">
         <div class="side-title">Quick Stats</div>
         <div class="stat-grid">
-          <div class="stat-box"><span class="stat-num" id="s-exp">0</span><span class="stat-lbl">Experiences</span></div>
-          <div class="stat-box"><span class="stat-num" id="s-skills">0</span><span class="stat-lbl">Skills</span></div>
-          <div class="stat-box"><span class="stat-num" id="s-edu">0</span><span class="stat-lbl">Education</span></div>
-          <div class="stat-box"><span class="stat-num" id="s-docs">0</span><span class="stat-lbl">Documents</span></div>
+          <div class="stat-box"><span class="stat-num" id="st-repos">–</span><span class="stat-lbl">Repos</span></div>
+          <div class="stat-box"><span class="stat-num" id="st-commits">–</span><span class="stat-lbl">Commits</span></div>
+          <div class="stat-box"><span class="stat-num" id="st-stars">–</span><span class="stat-lbl">Stars</span></div>
+          <div class="stat-box"><span class="stat-num" id="st-skills">–</span><span class="stat-lbl">Skills</span></div>
         </div>
       </div>
       <div class="side-card">
-        <div class="side-title">Target Role</div>
-        <div id="s-target" style="font-size:13px;color:var(--dim)">—</div>
+        <div class="side-title">Languages</div>
+        <div id="pub-langs" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
       </div>
       <div class="side-card">
-        <div class="side-title">Languages & Tools</div>
-        <div id="s-langs" style="display:flex;flex-wrap:wrap;gap:5px"></div>
+        <div class="side-title">Currently Learning</div>
+        <div id="pub-learning" style="font-size:13px;color:var(--text-dim);line-height:1.7;"></div>
       </div>
       <div class="side-card">
-        <div class="side-title">Certifications</div>
-        <div id="s-certs" style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--dim)"></div>
-      </div>
-      <div class="side-card">
-        <div class="side-title">Soft Skills</div>
-        <div id="s-soft" style="display:flex;flex-wrap:wrap;gap:5px"></div>
+        <div class="side-title">Data Source</div>
+        <div id="pub-datasource" style="font-size:11px;color:var(--muted);font-family:var(--fm);line-height:1.7;"></div>
       </div>
     </aside>
   </div>
 
   <footer>
-    <p style="margin-bottom:6px">Powered by GitHub Pages · <a href="#" onclick="openLogin();return false">Admin Panel</a></p>
-    <p style="font-size:11px;color:var(--muted)">Data sourced from portfolio.json — update by pushing a new file to your repo</p>
+    <p>Built with ☄️ · GitHub Pages · <a href="#" onclick="openLogin();return false;">Admin</a></p>
   </footer>
-</div><!-- /#public-view -->
+</div>
 
 
-<!-- ══════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════
      ADMIN VIEW
-══════════════════════════════════════════════════════ -->
-<div id="admin-view" class="view" style="display:none">
+═══════════════════════════════════════════════════════ -->
+<div id="admin-view" class="view" style="display:none;height:100vh;">
 
   <nav id="admin-nav">
-    <div style="display:flex;align-items:center;gap:10px;font-weight:800">
-      🛸 Admin <span class="abadge">Panel</span>
+    <div class="anav-left">
+      ☄️ Admin Panel <span class="admin-badge">Admin</span>
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-size:12px;color:var(--dim)">Signed in as <strong style="color:var(--accent)">ruirui2</strong></span>
-      <button class="btn btn-sm" onclick="viewPublic()">👁️ View Site</button>
+    <div class="anav-right">
+      <span class="anav-user" id="admin-user-label"></span>
+      <button class="btn btn-sm" onclick="viewPublic()">👁 View Site</button>
       <button class="btn btn-sm btn-danger" onclick="logout()">Sign Out</button>
     </div>
   </nav>
 
   <div id="admin-sidebar">
-    <button class="a-item active" onclick="switchSec('import',this)">📥 Import Data</button>
-    <button class="a-item" onclick="switchSec('profile',this)">👤 Profile</button>
-    <button class="a-item" onclick="switchSec('files',this)">📁 Files</button>
-    <button class="a-item" onclick="switchSec('skills',this)">⚡ Skills</button>
-    <button class="a-item" onclick="switchSec('projects',this)">📦 Projects</button>
-    <button class="a-item" onclick="switchSec('export',this)">📤 Export / Deploy</button>
+    <button class="a-nav-item active" onclick="aSwitch('profile',this)">👤 Profile</button>
+    <button class="a-nav-item" onclick="aSwitch('import',this)">📥 Import</button>
+    <button class="a-nav-item" onclick="aSwitch('files',this)">📁 Files</button>
+    <button class="a-nav-item" onclick="aSwitch('skills',this)">⭐ Skills</button>
+    <button class="a-nav-item" onclick="aSwitch('projects',this)">🚀 Projects</button>
+    <button class="a-nav-item" onclick="aSwitch('exp',this)">💼 Experience</button>
+    <button class="a-nav-item" onclick="aSwitch('edu',this)">🎓 Education</button>
+    <button class="a-nav-item" onclick="aSwitch('export',this)">📤 Export</button>
+    <button class="a-nav-item" onclick="aSwitch('settings',this)">⚙️ Settings</button>
   </div>
 
   <div id="admin-main">
 
-    <!-- IMPORT -->
-    <div class="asec active" id="asec-import">
-      <div class="asec-title">Import Data</div>
-      <div class="asec-sub">Load data from your Resume Builder app or an existing portfolio JSON.</div>
-
-      <div class="import-panel">
-        <h3>📄 Import from Resume Builder (resumeai-v12)</h3>
-        <p>Export your data from the Resume Builder app (Export tab → "All Data (JSON)"), then upload it here. This will pull in your profile, experience, education, skills, SAR stories, skill ratings, and generated resume.</p>
-        <div class="drop-zone" id="rb-drop">
-          <input type="file" accept=".json" onchange="importResumeBuilder(this.files[0])"/>
-          <div style="font-size:28px;margin-bottom:8px">🧠</div>
-          <strong style="font-size:14px">Drop Resume Builder JSON here</strong>
-          <p>or click to browse · resumeai-v12 format</p>
-        </div>
-        <div id="rb-status" style="font-size:12px;color:var(--green);display:none"></div>
+    <!-- PROFILE -->
+    <div class="asec active" id="asec-profile">
+      <div class="asec-title">Edit Profile</div>
+      <div class="asec-sub">This data powers the public homepage. Changes are saved locally until you export and re-upload <code>portfolio-data.json</code>.</div>
+      <div class="profile-grid">
+        <div class="field"><label>Display Name</label><input id="f-name" placeholder="Rui Rui"/></div>
+        <div class="field"><label>Handle</label><input id="f-handle" placeholder="@ruirui2"/></div>
+        <div class="field" style="grid-column:1/-1"><label>Bio</label><textarea id="f-bio" rows="4" placeholder="Tell visitors about yourself..."></textarea></div>
+        <div class="field"><label>Location</label><input id="f-loc" placeholder="Seattle, WA"/></div>
+        <div class="field"><label>Company / Status</label><input id="f-company" placeholder="Open to Internships"/></div>
+        <div class="field"><label>Email</label><input id="f-email" type="email"/></div>
+        <div class="field"><label>GitHub URL</label><input id="f-github" placeholder="https://github.com/..."/></div>
+        <div class="field"><label>LinkedIn URL</label><input id="f-linkedin"/></div>
+        <div class="field"><label>Twitter / X URL</label><input id="f-twitter"/></div>
+        <div class="field"><label>Website URL</label><input id="f-website"/></div>
+        <div class="field"><label>Currently Learning</label><input id="f-learning" placeholder="AWS, ML, ..."/></div>
+        <div class="field"><label>Languages (comma-separated)</label><input id="f-langs" placeholder="Python, JavaScript, ..."/></div>
+        <div class="field"><label>Repo Count</label><input id="f-repos" type="number" min="0"/></div>
+        <div class="field"><label>Commit Count</label><input id="f-commits" type="number" min="0"/></div>
+        <div class="field"><label>Star Count</label><input id="f-stars" type="number" min="0"/></div>
       </div>
-
-      <div class="import-panel" style="background:rgba(124,77,255,.04);border-color:rgba(124,77,255,.2)">
-        <h3 style="color:#b39ddb">🌐 Import Portfolio JSON</h3>
-        <p>Import a previously exported <code>portfolio.json</code> file from this site or from your GitHub repo.</p>
-        <div class="drop-zone" id="pf-drop">
-          <input type="file" accept=".json" onchange="importPortfolioJSON(this.files[0])"/>
-          <div style="font-size:28px;margin-bottom:8px">🛸</div>
-          <strong style="font-size:14px">Drop portfolio.json here</strong>
-          <p>or click to browse</p>
-        </div>
-        <div id="pf-status" style="font-size:12px;color:var(--green);display:none"></div>
-      </div>
-
-      <div class="card" style="border-color:rgba(201,168,76,.2);background:rgba(201,168,76,.04)">
-        <div style="font-size:13px;font-weight:700;color:var(--star);margin-bottom:8px">⚙️ How Default JSON Loading Works</div>
-        <div style="font-size:13px;color:var(--dim);line-height:1.8">
-          On every page load, the site attempts to fetch <code style="color:var(--accent)">portfolio.json</code> from the same directory as this HTML file on GitHub.
-          If found, it overrides localStorage — so pushing a new <code>portfolio.json</code> to GitHub instantly updates the site on any device, even after a cache clear.
-          LocalStorage only acts as a fallback when the file can't be fetched (e.g. running locally).
-        </div>
-        <div style="margin-top:14px;font-size:13px;color:var(--dim);line-height:1.8">
-          <strong style="color:var(--text)">Workflow:</strong><br>
-          1. Edit your data here in the admin panel<br>
-          2. Click <strong style="color:var(--accent)">Export → Download portfolio.json</strong><br>
-          3. Commit &amp; push <code>portfolio.json</code> to your GitHub repo root<br>
-          4. GitHub Pages serves the new file → all visitors see the update immediately
-        </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-green" onclick="saveProfile()">💾 Save Profile</button>
       </div>
     </div>
 
-    <!-- PROFILE -->
-    <div class="asec" id="asec-profile">
-      <div class="asec-title">Edit Profile</div>
-      <div class="asec-sub">Your public-facing information.</div>
-      <div class="pgrid">
-        <div class="field"><label>Display Name</label><input id="f-name" placeholder="Rui Rui"/></div>
-        <div class="field"><label>Handle / Username</label><input id="f-handle" placeholder="@ruirui2"/></div>
-        <div class="field full"><label>Bio</label><textarea id="f-bio" rows="3" placeholder="Tell visitors about yourself..."></textarea></div>
-        <div class="field"><label>Location</label><input id="f-location" placeholder="Seattle, WA"/></div>
-        <div class="field"><label>Status / Company</label><input id="f-company" placeholder="Open to Work"/></div>
-        <div class="field"><label>Email</label><input id="f-email" placeholder="hello@example.com"/></div>
-        <div class="field"><label>GitHub URL</label><input id="f-github" placeholder="https://github.com/..."/></div>
-        <div class="field"><label>LinkedIn URL</label><input id="f-linkedin" placeholder="https://linkedin.com/in/..."/></div>
-        <div class="field"><label>Twitter / X</label><input id="f-twitter" placeholder="https://twitter.com/..."/></div>
-        <div class="field"><label>Website</label><input id="f-website" placeholder="https://..."/></div>
-        <div class="field"><label>Target Role</label><input id="f-role" placeholder="Software Engineer Intern"/></div>
-        <div class="field"><label>Target Company</label><input id="f-targetco" placeholder="Amazon, Google..."/></div>
+    <!-- IMPORT -->
+    <div class="asec" id="asec-import">
+      <div class="asec-title">Import Data</div>
+      <div class="asec-sub">Import from the Resume Builder app's JSON export, or restore a previous Portfolio JSON backup.</div>
+      <div class="io-grid">
+        <div class="io-card">
+          <div class="io-card-title">📋 Resume Builder JSON</div>
+          <div class="io-card-desc">Upload the JSON exported from the résumé.ai app. This imports your experience, education, skills, certifications, profile, and SAR stories automatically.</div>
+          <div class="io-zone" id="rb-drop">
+            <input type="file" accept=".json" onchange="importResumeBuilder(this.files[0])"/>
+            <div style="font-size:28px;margin-bottom:8px;">📋</div>
+            <div style="font-size:13px;color:var(--muted);">Click or drop resume-data.json</div>
+          </div>
+          <div id="rb-import-status" style="font-size:12px;color:var(--muted);margin-top:6px;"></div>
+        </div>
+        <div class="io-card">
+          <div class="io-card-title">💾 Portfolio JSON Backup</div>
+          <div class="io-card-desc">Restore from a previously exported portfolio-data.json file. This is the file you upload to GitHub to sync across devices.</div>
+          <div class="io-zone" id="pf-drop">
+            <input type="file" accept=".json" onchange="importPortfolioJSON(this.files[0])"/>
+            <div style="font-size:28px;margin-bottom:8px;">💾</div>
+            <div style="font-size:13px;color:var(--muted);">Click or drop portfolio-data.json</div>
+          </div>
+          <div id="pf-import-status" style="font-size:12px;color:var(--muted);margin-top:6px;"></div>
+        </div>
       </div>
-      <button class="btn btn-primary" onclick="saveProfile()">💾 Save Profile</button>
+      <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:18px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--accent3);">⚡ What gets imported from Resume Builder</div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.8;">
+          ✓ Profile (name, email, phone, location, summary, GitHub, LinkedIn)<br>
+          ✓ Experience entries + bullet points<br>
+          ✓ Education (school, degree, GPA, honors)<br>
+          ✓ Skills (technical, tools, certifications, soft) with proficiency ratings<br>
+          ✓ Certifications extracted from skills<br>
+          ✓ SAR stories converted to experience bullets
+        </div>
+      </div>
     </div>
 
     <!-- FILES -->
     <div class="asec" id="asec-files">
       <div class="asec-title">Files &amp; Documents</div>
-      <div class="asec-sub">Upload files to display on your portfolio for visitors to download.</div>
-      <div class="drop-zone" id="file-drop">
-        <input type="file" id="file-input" multiple accept=".pdf,.html,.doc,.docx,.txt,.png,.jpg,.zip" onchange="handleFiles(this.files)"/>
-        <div style="font-size:32px;margin-bottom:8px">📁</div>
-        <strong style="font-size:14px">Click or drag files here</strong>
-        <p>PDF, HTML, DOC, Images, ZIP · max ~3MB each (localStorage limit)</p>
+      <div class="asec-sub">Upload files shown to visitors on the public portfolio. Stored as base64 in the exported JSON. Keep files small (&lt;2MB each) for best performance.</div>
+      <div class="upload-zone" id="file-zone">
+        <input type="file" id="file-input" multiple accept=".pdf,.html,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif,.zip" onchange="handleFiles(this.files)"/>
+        <div class="uz-icon">📁</div>
+        <div class="uz-text"><strong>Click to upload</strong> or drag and drop</div>
+        <div class="uz-sub">PDF, HTML, DOC, Images, ZIP · Max ~2MB per file</div>
       </div>
-      <div id="a-file-list"></div>
+      <div class="a-list" id="a-file-list"></div>
     </div>
 
     <!-- SKILLS -->
     <div class="asec" id="asec-skills">
-      <div class="asec-title">Skills</div>
-      <div class="asec-sub">Add skills and rate your expertise. Ratings from Resume Builder (0–5) are scaled to 0–10 here.</div>
-      <div class="add-row">
-        <div class="field" style="margin:0"><label>Skill Name</label><input id="sk-name" placeholder="e.g. Python"/></div>
-        <div class="field" style="margin:0">
-          <label>Rating (0–10): <strong id="sk-val">5</strong></label>
-          <input type="range" min="0" max="10" value="5" id="sk-rating"
-            oninput="document.getElementById('sk-val').textContent=this.value"
-            style="width:100%;padding:0;border:none;background:none;accent-color:var(--accent)"/>
+      <div class="asec-title">Technical Skills</div>
+      <div class="asec-sub">Add skills and rate your expertise 0–10. These display as animated bars on the public portfolio.</div>
+      <div class="add-strip add-strip-2">
+        <div class="field"><label>Skill Name</label><input id="ns-name" placeholder="e.g. Python"/></div>
+        <div class="field">
+          <label>Rating: <span id="ns-val" style="color:var(--accent);font-family:var(--fm);">5</span>/10</label>
+          <input type="range" min="0" max="10" value="5" id="ns-rating" oninput="document.getElementById('ns-val').textContent=this.value" style="width:100%;padding:0;border:none;background:none;accent-color:var(--accent);"/>
         </div>
-        <button class="btn btn-primary" onclick="addSkill()" style="height:36px;align-self:flex-end">Add</button>
+        <button class="btn btn-green" onclick="addSkill()" style="height:38px;align-self:flex-end;">+ Add</button>
       </div>
-      <div id="a-skill-list"></div>
+      <div class="a-list" id="a-skill-list"></div>
     </div>
 
     <!-- PROJECTS -->
     <div class="asec" id="asec-projects">
       <div class="asec-title">Pinned Projects</div>
-      <div class="asec-sub">Up to 6 projects shown on your homepage.</div>
-      <div class="add-row" style="grid-template-columns:1fr 1fr auto">
-        <div class="field" style="margin:0"><label>Project Name</label><input id="pj-name" placeholder="My Project"/></div>
-        <div class="field" style="margin:0"><label>Description</label><input id="pj-desc" placeholder="Short description..."/></div>
-        <button class="btn btn-primary" onclick="addProject()" style="height:36px;align-self:flex-end">Add</button>
+      <div class="asec-sub">Up to 6 pinned repositories shown on the public portfolio.</div>
+      <div class="add-strip add-strip-4">
+        <div class="field"><label>Name</label><input id="np-name" placeholder="my-project"/></div>
+        <div class="field"><label>Description</label><input id="np-desc" placeholder="Short description"/></div>
+        <div class="field"><label>Language</label><input id="np-lang" placeholder="Python"/></div>
+        <div class="field"><label>Repo URL (optional)</label><input id="np-url" placeholder="https://github.com/..."/></div>
       </div>
-      <div class="pgrid" style="margin-bottom:14px">
-        <div class="field" style="margin:0"><label>Repo URL</label><input id="pj-url" placeholder="https://github.com/..."/></div>
-        <div class="field" style="margin:0"><label>Language</label><input id="pj-lang" placeholder="Python"/></div>
+      <button class="btn btn-green" style="margin-bottom:20px;" onclick="addProject()">+ Add Project</button>
+      <div class="a-list" id="a-proj-list"></div>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="asec" id="asec-exp">
+      <div class="asec-title">Experience</div>
+      <div class="asec-sub">Work history, internships, and notable projects shown on the public portfolio. Imported automatically from Resume Builder.</div>
+      <div class="add-strip add-strip-4">
+        <div class="field"><label>Role / Title</label><input id="ne-role" placeholder="Software Engineer Intern"/></div>
+        <div class="field"><label>Organization</label><input id="ne-org" placeholder="Company or project"/></div>
+        <div class="field"><label>Period</label><input id="ne-period" placeholder="Jun 2024 – Aug 2024"/></div>
+        <div class="field"><label>Type</label>
+          <select id="ne-type"><option>internship</option><option>full-time</option><option>part-time</option><option>project</option><option>research</option><option>volunteer</option></select>
+        </div>
       </div>
-      <div id="a-proj-list"></div>
+      <div class="field"><label>Bullet Points (one per line)</label><textarea id="ne-bullets" rows="4" placeholder="Built a REST API with 200+ users&#10;Reduced latency by 40% with caching"></textarea></div>
+      <button class="btn btn-green" style="margin-bottom:20px;" onclick="addExp()">+ Add Entry</button>
+      <div class="a-list" id="a-exp-list"></div>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="asec" id="asec-edu">
+      <div class="asec-title">Education</div>
+      <div class="asec-sub">Schools, degrees, and honors. Imported from Resume Builder.</div>
+      <div class="add-strip add-strip-4">
+        <div class="field"><label>School</label><input id="ned-school" placeholder="Newport High School"/></div>
+        <div class="field"><label>Degree / Program</label><input id="ned-degree" placeholder="High School Diploma"/></div>
+        <div class="field"><label>Year</label><input id="ned-year" placeholder="2026"/></div>
+        <div class="field"><label>GPA</label><input id="ned-gpa" placeholder="3.91" type="text"/></div>
+      </div>
+      <div class="field"><label>Honors / Awards (comma-separated)</label><input id="ned-honors" placeholder="AP Calculus AB: 5, Honor Roll, CCNA Certified"/></div>
+      <button class="btn btn-green" style="margin-bottom:20px;" onclick="addEdu()">+ Add School</button>
+      <div class="a-list" id="a-edu-list"></div>
     </div>
 
     <!-- EXPORT -->
     <div class="asec" id="asec-export">
-      <div class="asec-title">Export &amp; Deploy</div>
-      <div class="asec-sub">Export your portfolio data to push to GitHub, keeping all devices in sync.</div>
-
-      <div class="card">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text)">📤 Export portfolio.json</div>
-        <p style="font-size:13px;color:var(--dim);margin-bottom:16px;line-height:1.7">
-          Download <code>portfolio.json</code> and commit it to your GitHub repo root alongside <code>index.html</code>.
-          On every page load, the site fetches this file from GitHub and uses it as the source of truth — overriding any cached data.
-        </p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-primary" onclick="exportPortfolioJSON()">📥 Download portfolio.json</button>
-          <button class="btn btn-purple" onclick="exportFullBackup()">💾 Full Backup (all data)</button>
+      <div class="asec-title">Export &amp; Publish</div>
+      <div class="asec-sub">Export your portfolio data as <code>portfolio-data.json</code>, then upload it to your GitHub repo root. The site auto-loads it on every fresh visit — no localStorage dependency.</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;">
+        <button class="btn btn-green" onclick="exportPortfolioJSON()">📤 Export portfolio-data.json</button>
+        <button class="btn btn-primary" onclick="exportAllJSON()">💾 Export Full Backup (all data)</button>
+      </div>
+      <div style="background:var(--card);border:1px solid rgba(57,211,83,.2);border-radius:var(--r);padding:20px;margin-bottom:18px;">
+        <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px;">🔄 How to update from another device</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.9;">
+          1. Export <strong>portfolio-data.json</strong> from this panel<br>
+          2. Go to your GitHub repo → click <strong>portfolio-data.json</strong><br>
+          3. Click the ✏️ pencil icon → replace content → <strong>Commit changes</strong><br>
+          4. GitHub Actions will redeploy automatically (~1 min)<br>
+          5. Any new visitor (or cleared cache) gets the latest data instantly
         </div>
       </div>
-
-      <div class="card" style="border-color:rgba(0,230,118,.15);background:rgba(0,230,118,.03)">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--green)">🚀 Deploy Steps</div>
-        <ol style="font-size:13px;color:var(--dim);line-height:2;padding-left:18px">
-          <li>Download <code>portfolio.json</code> above</li>
-          <li>In your GitHub repo, click <strong style="color:var(--text)">Add file → Upload files</strong></li>
-          <li>Upload <code>portfolio.json</code> (alongside <code>index.html</code>)</li>
-          <li>Click <strong style="color:var(--text)">Commit changes</strong></li>
-          <li>GitHub Pages will serve the new data in ~30 seconds</li>
-          <li>Any device loading your site will get the fresh data</li>
-        </ol>
-      </div>
-
-      <div class="card">
-        <div style="font-size:14px;font-weight:700;margin-bottom:10px">Import Backup</div>
-        <div class="drop-zone" style="padding:24px">
-          <input type="file" accept=".json" onchange="importPortfolioJSON(this.files[0])"/>
-          <p>Drop any exported JSON to restore</p>
+      <div style="background:var(--card);border:1px solid rgba(201,168,76,.2);border-radius:var(--r);padding:20px;">
+        <div style="font-size:13px;font-weight:700;color:var(--accent3);margin-bottom:10px;">⚠️ localStorage vs JSON file</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.9;">
+          • <strong>localStorage</strong> = only on your current device/browser, lost on cache clear<br>
+          • <strong>portfolio-data.json</strong> = lives on GitHub, loaded by every visitor, persists forever<br>
+          • The site loads the JSON file <strong>first</strong>. If you've made admin changes locally, export and upload to make them permanent.
         </div>
-      </div>
-
-      <div class="card btn-danger" style="margin-top:4px">
-        <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--red)">⚠️ Danger Zone</div>
-        <button class="btn btn-danger" onclick="resetAll()">🗑 Reset All Data</button>
       </div>
     </div>
 
-  </div><!-- /#admin-main -->
-</div><!-- /#admin-view -->
+    <!-- SETTINGS -->
+    <div class="asec" id="asec-settings">
+      <div class="asec-title">Settings</div>
+      <div class="asec-sub">Manage local data and admin credentials.</div>
+      <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:20px;max-width:500px;margin-bottom:18px;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:8px;">Clear Local Storage</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Removes all locally saved edits. On next load, the site will fetch the latest <code>portfolio-data.json</code> from GitHub.</div>
+        <button class="btn btn-danger" onclick="clearLocal()">🗑 Clear Local Data</button>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:20px;max-width:500px;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:8px;">Admin Credentials</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:4px;font-family:var(--fm);">Username: ruirui2 &nbsp;·&nbsp; Password stored in HTML</div>
+        <div style="font-size:12px;color:var(--muted);">To change credentials, edit the <code>ADMIN_CREDS</code> constant in index.html and re-upload.</div>
+      </div>
+    </div>
 
-</div><!-- /#app -->
+  </div>
+</div>
 
-<!-- Login Modal -->
+<!-- LOGIN MODAL -->
 <div class="overlay" id="login-modal">
   <div class="modal">
-    <div class="modal-title">🔐 Admin Sign In</div>
-    <div class="modal-sub">Access the portfolio editor.</div>
-    <div class="field"><label>Username</label><input id="lu" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-    <div class="field"><label>Password</label><input id="lp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-    <div class="modal-err" id="lerr">Incorrect credentials.</div>
+    <div class="modal-title">🔒 Admin Sign In</div>
+    <div class="modal-sub">Enter your credentials to edit the portfolio.</div>
+    <div class="field"><label>Username</label><input id="l-user" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="field"><label>Password</label><input id="l-pass" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="login-err" id="l-err">Incorrect username or password.</div>
     <div class="modal-foot">
       <button class="btn" onclick="closeLogin()">Cancel</button>
-      <button class="btn btn-primary" onclick="doLogin()">Sign In</button>
+      <button class="btn btn-primary" onclick="doLogin()">Sign In →</button>
     </div>
   </div>
 </div>
 
-<div id="toast"></div>
+<div id="toast">Saved!</div>
 
 <script>
-/* ════════════════════════════════════════════════════
-   CREDENTIALS
-════════════════════════════════════════════════════ */
-const CREDS = { u:'ruirui2', p:'Cisco123' };
-
-/* ════════════════════════════════════════════════════
-   DEFAULT / BLANK STATE
-════════════════════════════════════════════════════ */
-const BLANK = {
-  _source: 'blank',
-  _updated: new Date().toISOString(),
-  profile: { name:'', handle:'@ruirui2', bio:'', location:'', company:'', email:'', github:'', linkedin:'', twitter:'', website:'', role:'', targetco:'' },
-  experience: [],
-  education: [],
-  skills: [],         // [{id, name, rating:0-10}]
-  files: [],          // [{id, name, type, size, dataUrl, uploadedAt}]
-  projects: [],       // [{id, name, desc, url, lang, color}]
-  sar: [],            // [{context, situation, action, result}]
+/* ═══════════════════════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════════════════════ */
+const ADMIN_CREDS = { user: 'ruirui2', pass: 'Cisco123' };
+const DATA_URL = './portfolio-data.json'; // served from GitHub Pages
+const LS_KEY = 'portfolio_local_v2';
+const LANG_COLORS = {
+  JavaScript:'#f1e05a',Python:'#3572A5',HTML:'#e34c26',CSS:'#563d7c',
+  TypeScript:'#3178c6',Go:'#00ADD8',Rust:'#dea584',Java:'#b07219',
+  'C++':'#f34b7d',Ruby:'#701516',PHP:'#4F5D95',Swift:'#fa7343',
+  Kotlin:'#A97BFF',Shell:'#89e051',Other:'#8b949e'
 };
 
-/* ════════════════════════════════════════════════════
-   LANG COLORS
-════════════════════════════════════════════════════ */
-const LCOL = {JavaScript:'#f1e05a',Python:'#3572A5',HTML:'#e34c26',CSS:'#563d7c',TypeScript:'#3178c6',Go:'#00ADD8',Rust:'#dea584',Java:'#b07219','C++':'#f34b7d',Ruby:'#701516',Swift:'#fa7343',Shell:'#89e051',Default:'#4a4a6a'};
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+let db = null;          // active data
+let remoteData = null;  // fetched from portfolio-data.json
+let isAdmin = false;
+let dataSource = 'none';
 
-/* ════════════════════════════════════════════════════
-   DB
-════════════════════════════════════════════════════ */
-let db = Object.assign({}, BLANK);
-let adminLoggedIn = false;
+/* ═══════════════════════════════════════════════════════
+   INIT — load order:
+   1. Try fetch portfolio-data.json (GitHub)
+   2. Merge with localStorage overrides (admin edits)
+   3. Render
+═══════════════════════════════════════════════════════ */
+async function init() {
+  // Try to fetch the canonical JSON file
+  let remote = null;
+  try {
+    const r = await fetch(DATA_URL + '?_t=' + Date.now(), { cache: 'no-cache' });
+    if (r.ok) {
+      remote = await r.json();
+      remoteData = remote;
+      dataSource = 'portfolio-data.json (GitHub)';
+    }
+  } catch(e) {
+    // Running locally or no network — skip
+  }
+
+  // Check localStorage for admin overrides
+  let local = null;
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) local = JSON.parse(raw);
+  } catch(e){}
+
+  // Merge strategy: if localStorage exists AND its version >= remote version, prefer local
+  // Otherwise prefer remote (so uploading a new portfolio-data.json takes priority on fresh load)
+  if (local && remote) {
+    // local overrides only if it was saved AFTER the remote (admin was editing)
+    if ((local._localSavedAt || 0) > 0) {
+      db = local;
+      dataSource = 'localStorage (admin edits, not yet exported to GitHub)';
+    } else {
+      db = remote;
+      dataSource = 'portfolio-data.json (GitHub)';
+    }
+  } else if (remote) {
+    db = remote;
+  } else if (local) {
+    db = local;
+    dataSource = 'localStorage (offline)';
+  } else {
+    db = getDefaultDB();
+    dataSource = 'built-in defaults';
+  }
+
+  // Ensure all arrays exist
+  db.files        = db.files        || [];
+  db.skills       = db.skills       || [];
+  db.projects     = db.projects     || [];
+  db.experience   = db.experience   || [];
+  db.education    = db.education    || [];
+  db.certifications = db.certifications || [];
+  db.profile      = db.profile      || {};
+
+  renderPublicView();
+}
+
+function getDefaultDB() {
+  return {
+    profile:{name:'Rui Rui',handle:'@ruirui2',bio:'Developer & builder.',location:'Seattle, WA',company:'Open to Internships',email:'',github:'',linkedin:'',twitter:'',website:'',learning:'',langs:'',repoCount:0,commitCount:0,starCount:0},
+    skills:[],projects:[],files:[],experience:[],education:[],certifications:[],_version:1
+  };
+}
 
 function saveLocal() {
-  try { localStorage.setItem('portfolio_v2', JSON.stringify(db)); } catch(e){}
-}
-function loadLocal() {
-  try { const r = localStorage.getItem('portfolio_v2'); if(r) return JSON.parse(r); } catch(e){}
-  return null;
-}
-
-/* ════════════════════════════════════════════════════
-   BOOT — try fetch portfolio.json first, fallback localStorage
-════════════════════════════════════════════════════ */
-async function boot() {
   try {
-    const res = await fetch('portfolio.json?v=' + Date.now(), { cache:'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      db = Object.assign({}, BLANK, data);
-      db._source = 'github';
-      saveLocal(); // cache it
-      toast('Loaded from GitHub ✓', false);
-    } else { throw new Error('not found'); }
-  } catch(e) {
-    // Fallback: localStorage
-    const local = loadLocal();
-    if (local) { db = Object.assign({}, BLANK, local); db._source = 'local'; }
-    else { db = Object.assign({}, BLANK); db._source = 'blank'; }
-  }
-  renderPublic();
+    db._localSavedAt = Date.now();
+    localStorage.setItem(LS_KEY, JSON.stringify(db));
+  } catch(e){ toast('Storage full — export and upload to GitHub instead.', true); }
 }
 
-/* ════════════════════════════════════════════════════
-   LOGIN
-════════════════════════════════════════════════════ */
-function openLogin() { document.getElementById('login-modal').classList.add('open'); document.getElementById('lu').value=''; document.getElementById('lp').value=''; document.getElementById('lerr').style.display='none'; setTimeout(()=>document.getElementById('lu').focus(),60); }
-function closeLogin() { document.getElementById('login-modal').classList.remove('open'); }
-function doLogin() {
-  const u=document.getElementById('lu').value.trim(), p=document.getElementById('lp').value;
-  if(u===CREDS.u && p===CREDS.p) { adminLoggedIn=true; closeLogin(); showAdmin(); }
-  else { document.getElementById('lerr').style.display='block'; document.getElementById('lp').value=''; }
-}
-function logout() { adminLoggedIn=false; viewPublic(); }
+/* ═══════════════════════════════════════════════════════
+   PUBLIC RENDER
+═══════════════════════════════════════════════════════ */
+function renderPublicView() {
+  const p = db.profile || {};
 
-/* ════════════════════════════════════════════════════
-   VIEWS
-════════════════════════════════════════════════════ */
-function showAdmin() {
-  document.getElementById('public-view').style.display='none';
-  document.getElementById('admin-view').style.display='grid';
-  populateForms(); renderAdminFiles(); renderAdminSkills(); renderAdminProjects();
-}
-function viewPublic() {
-  document.getElementById('public-view').style.display='block';
-  document.getElementById('admin-view').style.display='none';
-  renderPublic();
-}
+  // Nav
+  document.getElementById('nav-name').textContent = p.name || 'Portfolio';
 
-/* ════════════════════════════════════════════════════
-   ADMIN SECTIONS
-════════════════════════════════════════════════════ */
-function switchSec(id, btn) {
-  document.querySelectorAll('.asec').forEach(s=>s.classList.remove('active'));
-  document.getElementById('asec-'+id).classList.add('active');
-  document.querySelectorAll('.a-item').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-}
+  // Avatar
+  const initials = (p.name||'RR').split(' ').map(w=>w[0]||'').join('').toUpperCase().slice(0,2);
+  document.getElementById('pub-avatar').textContent = initials;
 
-/* ════════════════════════════════════════════════════
-   IMPORT: Resume Builder JSON (resumeai-v12 schema)
-════════════════════════════════════════════════════ */
-function importResumeBuilder(file) {
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = e => {
-    try {
-      const raw = JSON.parse(e.target.result);
-      // Accept either the raw storage blob (with _tab etc) or the saved data
-      const src = raw;
+  // Hero text
+  document.getElementById('pub-name').innerHTML = (() => {
+    const n = (p.name||'Rui Rui').trim().split(' ');
+    if(n.length<2) return `<span class="name-accent">${h(p.name)}</span>`;
+    return n.slice(0,-1).join(' ') + ' <span class="name-accent">' + n[n.length-1] + '</span>';
+  })();
+  document.getElementById('pub-handle').textContent = p.handle || '@ruirui2';
+  document.getElementById('pub-bio').textContent = p.bio || '';
 
-      // Profile
-      const p = src.profile || {};
-      db.profile.name     = p.name     || db.profile.name;
-      db.profile.bio      = p.summary  || db.profile.bio;
-      db.profile.location = p.location || db.profile.location;
-      db.profile.email    = p.email    || db.profile.email;
-      db.profile.handle   = '@' + (src.liUrl||'').split('/').filter(Boolean).pop() || db.profile.handle;
-      db.profile.github   = src.ghUrl  || db.profile.github;
-      db.profile.linkedin = src.liUrl  || db.profile.linkedin;
-      db.profile.role     = src.tailor?.role || db.profile.role;
-      db.profile.targetco = src.tailor?.company || db.profile.targetco;
-
-      // Experience
-      if (Array.isArray(src.experience) && src.experience.length) {
-        db.experience = src.experience
-          .filter(ex => ex.org || ex.role)
-          .map(ex => ({
-            org: ex.org || '',
-            role: ex.role || '',
-            period: (ex.start||'') + (ex.end ? ' – ' + ex.end : ''),
-            bullets: typeof ex.bullets === 'string'
-              ? ex.bullets.split('\n').map(b=>b.trim()).filter(Boolean)
-              : Array.isArray(ex.bullets) ? ex.bullets : []
-          }));
-      }
-
-      // Education
-      if (Array.isArray(src.education) && src.education.length) {
-        db.education = src.education
-          .filter(ed => ed.school)
-          .map(ed => ({
-            school: ed.school || '',
-            degree: ed.degree || '',
-            year: ed.gradYear || ed.year || '',
-            gpa: ed.gpa || '',
-            honors: Array.isArray(ed.honors) ? ed.honors : [],
-            activities: ed.activities || ''
-          }));
-      }
-
-      // Skills (merge from raw skill strings + ratings)
-      const ratings = src.skillRatings || {};
-      const vis = src.skillVisibility || {};
-      const parseSkillStr = (str, category) => {
-        return (str||'').split(',').map(s=>s.trim()).filter(s=>s && vis[s]!==false).map(s=>({
-          id: Date.now()+Math.random(),
-          name: s, category,
-          // Resume builder uses 1-5 rating; scale to 0-10
-          rating: ratings[s] != null ? Math.round(ratings[s]*2) : 6
-        }));
-      };
-      const sk = src.skills || {};
-      const merged = [
-        ...parseSkillStr(sk.technical, 'Technical'),
-        ...parseSkillStr(sk.tools, 'Tools'),
-        ...parseSkillStr(sk.certifications, 'Certifications'),
-        ...parseSkillStr(sk.soft, 'Soft Skills'),
-      ];
-      // Dedup by name
-      const seen = new Set();
-      db.skills = merged.filter(s => { if(seen.has(s.name.toLowerCase())) return false; seen.add(s.name.toLowerCase()); return true; });
-
-      // SAR stories
-      if (Array.isArray(src.sar) && src.sar.length) {
-        db.sar = src.sar.filter(s=>s.action||s.situation).map(s=>({
-          context: s.context||'',
-          situation: s.situation||'',
-          action: s.action||'',
-          result: s.result||''
-        }));
-      }
-
-      // If generated resume exists, also pull that data as fallback
-      if (src.generated) {
-        const g = src.generated;
-        if (!db.profile.name && g.name) db.profile.name = g.name;
-        if (!db.profile.bio && g.summary) db.profile.bio = g.summary;
-        if (!db.experience.length && Array.isArray(g.experience)) {
-          db.experience = g.experience.map(ex=>({org:ex.company||'',role:ex.role||'',period:ex.period||'',bullets:Array.isArray(ex.bullets)?ex.bullets:[]}));
-        }
-        if (!db.education.length && Array.isArray(g.education)) {
-          db.education = g.education.map(ed=>({school:ed.school||'',degree:ed.degree||'',year:ed.year||'',gpa:ed.gpa||'',honors:[],activities:''}));
-        }
-      }
-
-      db._updated = new Date().toISOString();
-      saveLocal();
-      populateForms(); renderAdminFiles(); renderAdminSkills(); renderAdminProjects();
-      document.getElementById('rb-status').style.display='block';
-      document.getElementById('rb-status').textContent='✅ Imported successfully! ' + db.experience.length + ' experiences, ' + db.skills.length + ' skills, ' + db.sar.length + ' SAR stories.';
-      toast('Resume Builder data imported!');
-    } catch(err) { toast('Import failed: ' + err.message, true); }
-  };
-  r.readAsText(file);
-}
-
-/* ════════════════════════════════════════════════════
-   IMPORT: Portfolio JSON
-════════════════════════════════════════════════════ */
-function importPortfolioJSON(file) {
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = e => {
-    try {
-      const data = JSON.parse(e.target.result);
-      db = Object.assign({}, BLANK, data);
-      db._updated = new Date().toISOString();
-      saveLocal();
-      populateForms(); renderAdminFiles(); renderAdminSkills(); renderAdminProjects();
-      const el = document.getElementById('pf-status');
-      if(el){el.style.display='block';el.textContent='✅ Portfolio JSON loaded.';}
-      toast('Portfolio JSON imported!');
-    } catch(err) { toast('Import failed: ' + err.message, true); }
-  };
-  r.readAsText(file);
-}
-
-/* ════════════════════════════════════════════════════
-   EXPORT
-════════════════════════════════════════════════════ */
-function exportPortfolioJSON() {
-  // Export without large dataUrls in files (to keep size reasonable)
-  // Files are still included but visitors must upload fresh
-  const out = Object.assign({}, db, {
-    _source: 'export',
-    _updated: new Date().toISOString()
-  });
-  dlJSON('portfolio.json', out);
-  toast('portfolio.json downloaded — commit it to your repo!');
-}
-function exportFullBackup() {
-  dlJSON('portfolio-backup-' + Date.now() + '.json', db);
-  toast('Full backup downloaded.');
-}
-function dlJSON(name, obj) {
-  const b = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
-  const u = URL.createObjectURL(b);
-  const a = document.createElement('a');
-  a.href=u; a.download=name; a.click(); URL.revokeObjectURL(u);
-}
-
-/* ════════════════════════════════════════════════════
-   PROFILE
-════════════════════════════════════════════════════ */
-function populateForms() {
-  const p = db.profile||{};
-  const set = (id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
-  set('f-name',p.name); set('f-handle',p.handle); set('f-bio',p.bio);
-  set('f-location',p.location); set('f-company',p.company); set('f-email',p.email);
-  set('f-github',p.github); set('f-linkedin',p.linkedin); set('f-twitter',p.twitter);
-  set('f-website',p.website); set('f-role',p.role); set('f-targetco',p.targetco);
-}
-function saveProfile() {
-  const g = id=>document.getElementById(id)?.value.trim()||'';
-  db.profile = {
-    name:g('f-name'), handle:g('f-handle'), bio:g('f-bio'),
-    location:g('f-location'), company:g('f-company'), email:g('f-email'),
-    github:g('f-github'), linkedin:g('f-linkedin'), twitter:g('f-twitter'),
-    website:g('f-website'), role:g('f-role'), targetco:g('f-targetco')
-  };
-  db._updated = new Date().toISOString();
-  saveLocal(); toast('Profile saved!');
-}
-
-/* ════════════════════════════════════════════════════
-   FILES
-════════════════════════════════════════════════════ */
-function handleFiles(files) {
-  Array.from(files).forEach(file => {
-    const r = new FileReader();
-    r.onload = e => {
-      db.files.push({ id:Date.now()+Math.random(), name:file.name, type:file.type, size:file.size, dataUrl:e.target.result, uploadedAt:new Date().toISOString() });
-      saveLocal(); renderAdminFiles(); toast('File uploaded: '+file.name);
-    };
-    r.readAsDataURL(file);
-  });
-}
-function delFile(id) { db.files=db.files.filter(f=>String(f.id)!==String(id)); saveLocal(); renderAdminFiles(); toast('File deleted.'); }
-function renderAdminFiles() {
-  const el = document.getElementById('a-file-list');
-  if (!db.files.length) { el.innerHTML='<div class="empty"><div class="empty-ico">📂</div><p>No files yet.</p></div>'; return; }
-  el.innerHTML = db.files.map(f=>`
-    <div class="a-file-row">
-      <div style="font-size:20px">${ficon(f.name)}</div>
-      <div class="a-file-info"><div class="a-file-name">${esc(f.name)}</div><div class="a-file-meta">${fbytes(f.size)} · ${fdate(f.uploadedAt)}</div></div>
-      <a class="btn btn-sm btn-primary" href="${f.dataUrl}" download="${esc(f.name)}">⬇</a>
-      <button class="btn btn-sm btn-danger" onclick="delFile('${f.id}')">🗑</button>
-    </div>`).join('');
-}
-
-/* ════════════════════════════════════════════════════
-   SKILLS
-════════════════════════════════════════════════════ */
-function addSkill() {
-  const n=document.getElementById('sk-name').value.trim();
-  const r=parseInt(document.getElementById('sk-rating').value);
-  if(!n) return;
-  if(db.skills.some(s=>s.name.toLowerCase()===n.toLowerCase())) { toast('Skill already exists.',true); return; }
-  db.skills.push({id:Date.now(),name:n,rating:r,category:'Technical'});
-  document.getElementById('sk-name').value='';
-  document.getElementById('sk-rating').value=5;
-  document.getElementById('sk-val').textContent='5';
-  saveLocal(); renderAdminSkills(); toast('Skill added!');
-}
-function updateSkill(id,val) {
-  const s=db.skills.find(x=>String(x.id)===String(id)); if(s){s.rating=parseInt(val);saveLocal();}
-}
-function delSkill(id) { db.skills=db.skills.filter(s=>String(s.id)!==String(id)); saveLocal(); renderAdminSkills(); }
-function renderAdminSkills() {
-  const el = document.getElementById('a-skill-list');
-  if(!db.skills.length){el.innerHTML='<div class="empty"><div class="empty-ico">⚡</div><p>No skills yet.</p></div>';return;}
-  el.innerHTML = db.skills.map(s=>`
-    <div class="skill-a-row">
-      <div class="skill-a-name">${esc(s.name)} <span style="font-size:10px;color:var(--muted)">${esc(s.category||'')}</span></div>
-      <input type="range" min="0" max="10" value="${s.rating}"
-        oninput="this.nextElementSibling.textContent=this.value;updateSkill('${s.id}',this.value)"
-        style="width:140px;padding:0;border:none;background:none;accent-color:var(--accent)"/>
-      <strong style="font-size:13px;min-width:20px;font-family:var(--mono)">${s.rating}</strong>
-      <button class="btn btn-sm btn-danger" onclick="delSkill('${s.id}')">🗑</button>
-    </div>`).join('');
-}
-
-/* ════════════════════════════════════════════════════
-   PROJECTS
-════════════════════════════════════════════════════ */
-function addProject() {
-  if(db.projects.length>=6){toast('Max 6 projects.',true);return;}
-  const n=document.getElementById('pj-name').value.trim();
-  if(!n) return;
-  const l=document.getElementById('pj-lang').value.trim()||'Other';
-  db.projects.push({id:Date.now(),name:n,desc:document.getElementById('pj-desc').value.trim(),url:document.getElementById('pj-url').value.trim()||'#',lang:l,color:LCOL[l]||LCOL.Default});
-  ['pj-name','pj-desc','pj-url','pj-lang'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  saveLocal(); renderAdminProjects(); toast('Project added!');
-}
-function delProj(id) { db.projects=db.projects.filter(p=>String(p.id)!==String(id)); saveLocal(); renderAdminProjects(); }
-function renderAdminProjects() {
-  const el=document.getElementById('a-proj-list');
-  if(!db.projects.length){el.innerHTML='<div class="empty"><div class="empty-ico">📦</div><p>No projects yet.</p></div>';return;}
-  el.innerHTML=db.projects.map(p=>`
-    <div class="a-file-row">
-      <div style="font-size:20px">📦</div>
-      <div class="a-file-info">
-        <div class="a-file-name">${esc(p.name)} <span style="font-size:11px;color:var(--muted)">${esc(p.lang)}</span></div>
-        <div class="a-file-meta">${esc(p.desc)}</div>
-      </div>
-      <button class="btn btn-sm btn-danger" onclick="delProj('${p.id}')">🗑</button>
-    </div>`).join('');
-}
-
-/* ════════════════════════════════════════════════════
-   RESET
-════════════════════════════════════════════════════ */
-function resetAll() {
-  if(!confirm('Reset all data? This cannot be undone.')) return;
-  db=Object.assign({},BLANK); localStorage.removeItem('portfolio_v2');
-  populateForms(); renderAdminFiles(); renderAdminSkills(); renderAdminProjects();
-  toast('Data reset.');
-}
-
-/* ════════════════════════════════════════════════════
-   RENDER PUBLIC
-════════════════════════════════════════════════════ */
-function renderPublic() {
-  const p = db.profile||{};
-
-  // Name & handle
-  document.getElementById('p-name').innerHTML = esc(p.name||'Your Name');
-  document.getElementById('p-handle').textContent = p.handle||'@ruirui2';
-  document.getElementById('p-bio').textContent = p.bio||'';
-
-  // Avatar initials
-  const init = (p.name||'RR').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  document.getElementById('p-avatar').textContent = init||'RR';
-
-  // Meta row
-  const metas = [];
-  if(p.location) metas.push(`<span class="meta-item">📍 ${esc(p.location)}</span>`);
-  if(p.company)  metas.push(`<span class="meta-item">💼 ${esc(p.company)}</span>`);
-  if(p.email)    metas.push(`<span class="meta-item">✉️ ${esc(p.email)}</span>`);
-  document.getElementById('p-meta').innerHTML = metas.join('');
-
-  // Updated
-  document.getElementById('p-updated').textContent = db._updated ? fdate(db._updated) : 'recently';
+  // Meta pills
+  const metaEl = document.getElementById('pub-meta');
+  const pills = [];
+  if(p.location) pills.push(`<span class="meta-pill"><span class="mp-icon">📍</span>${h(p.location)}</span>`);
+  if(p.company)  pills.push(`<span class="meta-pill"><span class="mp-icon">💼</span>${h(p.company)}</span>`);
+  if(p.email)    pills.push(`<span class="meta-pill"><span class="mp-icon">✉️</span>${h(p.email)}</span>`);
+  metaEl.innerHTML = pills.join('');
 
   // Status
-  const src = db._source;
-  document.getElementById('p-status').innerHTML = src==='github' ? '🌐 Loaded from GitHub — always up to date' : '💾 Loaded from local cache';
+  document.getElementById('pub-status').textContent = p.company ? `${p.company} · Portfolio last synced from GitHub` : 'Available for opportunities';
 
   // Socials
-  const socs = [];
-  if(p.github)   socs.push([p.github,'🐙','GitHub']);
-  if(p.linkedin) socs.push([p.linkedin,'💼','LinkedIn']);
-  if(p.twitter)  socs.push([p.twitter,'🐦','Twitter / X']);
-  if(p.website)  socs.push([p.website,'🌐','Website']);
-  if(p.email)    socs.push(['mailto:'+p.email,'✉️',p.email]);
-  document.getElementById('p-socials').innerHTML = socs.map(([h,i,l])=>`<a href="${esc(h)}" class="soc-link" target="_blank">${i} ${esc(l)}</a>`).join('');
+  const socials = [];
+  if(p.github)   socials.push({href:p.github,   icon:'🐙', label:'GitHub'});
+  if(p.linkedin) socials.push({href:p.linkedin,  icon:'💼', label:'LinkedIn'});
+  if(p.twitter)  socials.push({href:p.twitter,   icon:'🐦', label:'Twitter'});
+  if(p.website)  socials.push({href:p.website,   icon:'🌐', label:'Website'});
+  if(p.email)    socials.push({href:'mailto:'+p.email, icon:'✉️', label:p.email});
+  document.getElementById('pub-socials').innerHTML = socials.map(s=>
+    `<a href="${h(s.href)}" class="social-link" target="_blank">${s.icon} ${h(s.label)}</a>`
+  ).join('');
 
-  // --- EXPERIENCE ---
-  const expEl = document.getElementById('p-experience');
-  if(!db.experience?.length) {
-    expEl.innerHTML='<div class="empty"><div class="empty-ico">💼</div><p>No experience added yet.</p></div>';
-  } else {
-    expEl.innerHTML = db.experience.map(ex=>`
-      <div class="exp-card">
-        <div class="exp-header">
-          <div class="exp-role">${esc(ex.role||'')}</div>
-          <div class="exp-period">${esc(ex.period||'')}</div>
-        </div>
-        <div class="exp-org">${esc(ex.org||'')}</div>
-        <div class="exp-bullets">
-          ${(ex.bullets||[]).map(b=>`<div class="exp-bullet"><span>${esc(b)}</span></div>`).join('')}
-        </div>
-      </div>`).join('');
-  }
+  // Stats
+  el('st-repos').textContent   = p.repoCount   || '–';
+  el('st-commits').textContent = p.commitCount || '–';
+  el('st-stars').textContent   = p.starCount   || '–';
+  el('st-skills').textContent  = (db.skills||[]).length;
 
-  // --- EDUCATION ---
-  const eduEl = document.getElementById('p-education');
-  if(!db.education?.length) {
-    eduEl.innerHTML='<div class="empty"><div class="empty-ico">🎓</div><p>No education added yet.</p></div>';
-  } else {
-    eduEl.innerHTML = db.education.map(ed=>`
-      <div class="edu-card">
-        <div class="edu-school">${esc(ed.school||'')}</div>
-        <div class="edu-degree">${esc(ed.degree||'')}${ed.gpa?' · GPA: '+esc(ed.gpa):''}</div>
-        <div class="edu-meta">
-          ${ed.year?`<span class="tag">${esc(ed.year)}</span>`:''}
-          ${(ed.honors||[]).map(h=>`<span class="tag tag-gold">${esc(h)}</span>`).join('')}
-          ${ed.activities?`<span class="tag tag-purple">${esc(ed.activities)}</span>`:''}
-        </div>
-      </div>`).join('');
-  }
+  // Languages
+  const langs = (p.langs||'').split(',').map(l=>l.trim()).filter(Boolean);
+  el('pub-langs').innerHTML = langs.map(l=>`<span class="tag">${h(l)}</span>`).join('');
 
-  // --- SKILLS ---
-  const skillEl = document.getElementById('p-skills');
-  if(!db.skills?.length) {
-    skillEl.innerHTML='<div class="empty"><div class="empty-ico">⚡</div><p>No skills added yet.</p></div>';
-  } else {
-    skillEl.innerHTML = db.skills.map(s=>`
-      <div class="skill-row">
-        <div class="skill-name">${esc(s.name)}</div>
-        <div class="skill-track"><div class="skill-fill" style="width:${s.rating*10}%"></div></div>
-        <div class="skill-val">${s.rating}/10</div>
-      </div>`).join('');
-  }
+  // Learning
+  el('pub-learning').textContent = p.learning || '—';
 
-  // --- PROJECTS ---
-  const projEl = document.getElementById('p-projects');
-  if(!db.projects?.length) {
-    projEl.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ico">📦</div><p>No projects yet.</p></div>';
-  } else {
-    projEl.innerHTML = db.projects.map(p=>`
-      <a class="proj-card" href="${esc(p.url)}" target="_blank" style="text-decoration:none">
-        <div class="proj-name">📦 ${esc(p.name)}</div>
-        <div class="proj-desc">${esc(p.desc)}</div>
-        <div class="proj-meta">
-          <span><span class="lang-dot" style="background:${p.color||'#4a4a6a'}"></span> ${esc(p.lang)}</span>
-        </div>
-      </a>`).join('');
-  }
+  // Data source
+  el('pub-datasource').innerHTML = `Source: <strong>${h(dataSource)}</strong>`;
 
-  // --- SAR ---
-  const sarEl = document.getElementById('p-sar');
-  const sarFiltered = (db.sar||[]).filter(s=>s.situation||s.action);
-  if(!sarFiltered.length) {
-    sarEl.innerHTML='<div class="empty"><div class="empty-ico">📖</div><p>No project stories added yet.</p></div>';
-  } else {
-    sarEl.innerHTML = sarFiltered.map(s=>`
-      <div class="sar-card">
-        ${s.context?`<div class="sar-ctx">${esc(s.context)}</div>`:''}
-        ${s.situation?`<div class="sar-row"><div class="sar-label">Situation</div><div class="sar-val">${esc(s.situation)}</div></div>`:''}
-        ${s.action?`<div class="sar-row"><div class="sar-label">Action</div><div class="sar-val">${esc(s.action)}</div></div>`:''}
-        ${s.result?`<div class="sar-row"><div class="sar-label">Result</div><div class="sar-val">${esc(s.result)}</div></div>`:''}
-      </div>`).join('');
-  }
-
-  // --- DOCS ---
-  const docEl = document.getElementById('p-docs');
-  if(!db.files?.length) {
-    docEl.innerHTML='<div class="empty"><div class="empty-ico">📂</div><p>No documents uploaded yet.</p></div>';
-  } else {
-    docEl.innerHTML = db.files.map(f=>`
-      <div class="doc-card">
-        <div class="doc-icon">${ficon(f.name)}</div>
-        <div class="doc-info"><div class="doc-name">${esc(f.name)}</div><div class="doc-meta">${fbytes(f.size)} · ${fdate(f.uploadedAt)}</div></div>
-        <a class="btn btn-sm btn-primary" href="${f.dataUrl}" download="${esc(f.name)}">⬇ Download</a>
-      </div>`).join('');
-  }
-
-  // --- SIDEBAR STATS ---
-  document.getElementById('s-exp').textContent = (db.experience||[]).length;
-  document.getElementById('s-skills').textContent = (db.skills||[]).length;
-  document.getElementById('s-edu').textContent = (db.education||[]).length;
-  document.getElementById('s-docs').textContent = (db.files||[]).length;
-
-  // Target
-  const role = p.role||'', co = p.targetco||'';
-  document.getElementById('s-target').textContent = [role,co].filter(Boolean).join(' @ ')||'—';
-
-  // Langs (tools category from skills)
-  const tools = (db.skills||[]).filter(s=>s.category==='Tools'||s.category==='Technical').slice(0,8);
-  document.getElementById('s-langs').innerHTML = tools.map(s=>`<span class="tag">${esc(s.name)}</span>`).join('');
-
-  // Certs
-  const certs = (db.skills||[]).filter(s=>s.category==='Certifications');
-  document.getElementById('s-certs').innerHTML = certs.length ? certs.map(s=>`<span>🏅 ${esc(s.name)}</span>`).join('') : '<span style="font-size:12px;color:var(--muted)">—</span>';
-
-  // Soft
-  const soft = (db.skills||[]).filter(s=>s.category==='Soft Skills');
-  document.getElementById('s-soft').innerHTML = soft.map(s=>`<span class="tag tag-purple">${esc(s.name)}</span>`).join('');
-
+  // Experience
+  renderPubExp();
+  // Education
+  renderPubEdu();
+  // Projects
+  renderPubProjects();
+  // Certifications
+  renderPubCerts();
+  // Skills
+  renderPubSkills();
+  // Documents
+  renderPubDocs();
   // Heatmap
   renderHeatmap();
 }
 
-function renderHeatmap() {
-  const g=document.getElementById('p-heatmap');
-  let h='';
-  for(let i=0;i<52*7;i++){const r=Math.random();let c='h0';if(r>.75)c='h1';if(r>.86)c='h2';if(r>.93)c='h3';if(r>.97)c='h4';h+=`<div class="hc ${c}"></div>`;}
-  g.innerHTML=h;
+function renderPubExp() {
+  const list = db.experience || [];
+  const el2 = el('pub-exp');
+  if(!list.length){ el2.innerHTML=emptyState('💼','No experience added yet.'); return; }
+  el2.innerHTML = list.map(e=>`
+    <div class="exp-card">
+      <div class="exp-icon">${expIcon(e.type)}</div>
+      <div class="exp-body">
+        <div class="exp-role">${h(e.role||e.org||'')}</div>
+        <div class="exp-org">${h(e.company||e.org||'')}</div>
+        <div class="exp-period">${h(e.period||((e.start||'')+(e.end?' – '+e.end:'')))} · <span class="tag" style="font-size:10px;">${h(e.type||'')}</span></div>
+        <div class="exp-bullets">${bulletsHTML(e.bullets)}</div>
+      </div>
+    </div>`).join('');
 }
 
-/* ════════════════════════════════════════════════════
+function renderPubEdu() {
+  const list = db.education || [];
+  const el2 = el('pub-edu');
+  if(!list.length){ el2.innerHTML=emptyState('🎓','No education added yet.'); return; }
+  el2.innerHTML = list.map(e=>`
+    <div class="edu-card">
+      <div class="edu-school">${h(e.school||'')}</div>
+      <div class="edu-degree">${h(e.degree||'')}${e.gpa?' · GPA '+h(e.gpa):''}</div>
+      <div class="edu-meta">${h(e.year||e.gradYear||'')}</div>
+      <div class="edu-honors">${(e.honors||[]).map(hn=>`<span class="tag tag-amber">${h(hn)}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function renderPubProjects() {
+  const list = db.projects || [];
+  const el2 = el('pub-projects');
+  if(!list.length){ el2.innerHTML=emptyState('🚀','No projects pinned yet.'); return; }
+  el2.innerHTML = list.map(p=>`
+    <a class="proj-card" href="${h(p.url||'#')}" target="_blank">
+      <div class="proj-card-name">📦 ${h(p.name)}</div>
+      <div class="proj-card-desc">${h(p.desc||'')}</div>
+      <div class="proj-card-foot">
+        <span><span class="lang-dot" style="background:${p.color||'#8b949e'}"></span> ${h(p.lang||'')}</span>
+        <span>⭐ ${p.stars||Math.floor(Math.random()*40+2)}</span>
+      </div>
+    </a>`).join('');
+}
+
+function renderPubCerts() {
+  const list = db.certifications || [];
+  const el2 = el('pub-certs');
+  if(!list.length){ el2.innerHTML=emptyState('🏅','No certifications added yet.'); return; }
+  el2.innerHTML = list.map(c=>`
+    <div class="cert-card">
+      <div class="cert-badge">🏅</div>
+      <div>
+        <div class="cert-name">${h(c.name||c)}</div>
+        <div class="cert-issuer">${h(c.issuer||'')}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderPubSkills() {
+  const list = db.skills || [];
+  const el2 = el('pub-skills');
+  if(!list.length){ el2.innerHTML=emptyState('⭐','No skills added yet.'); return; }
+  el2.innerHTML = list.map(s=>`
+    <div class="skill-row">
+      <div class="skill-name">${h(s.name)}</div>
+      <div class="skill-track"><div class="skill-fill" style="width:${(s.rating||0)*10}%"></div></div>
+      <div class="skill-val">${s.rating||0}/10</div>
+    </div>`).join('');
+}
+
+function renderPubDocs() {
+  const list = db.files || [];
+  const el2 = el('pub-docs');
+  if(!list.length){ el2.innerHTML=emptyState('📁','No documents uploaded yet.'); return; }
+  el2.innerHTML = list.map(f=>`
+    <div class="doc-card">
+      <div class="doc-icon">${fileIcon(f.name)}</div>
+      <div class="doc-info">
+        <div class="doc-name">${h(f.name)}</div>
+        <div class="doc-meta">${fmtBytes(f.size)} · ${fmtDate(f.uploadedAt)}</div>
+      </div>
+      <a class="btn btn-primary btn-sm" href="${f.dataUrl}" download="${h(f.name)}">⬇ Download</a>
+    </div>`).join('');
+}
+
+function renderHeatmap() {
+  const grid = el('heatmap');
+  const cells = 52*7;
+  let html = '';
+  // Use a deterministic seed so it doesn't change on re-render
+  let seed = 42;
+  function rng(){ seed=(seed*1664525+1013904223)&0xffffffff; return (seed>>>0)/0xffffffff; }
+  for(let i=0;i<cells;i++){
+    const r=rng();
+    let c='h0';
+    if(r>.75)c='h1'; if(r>.85)c='h2'; if(r>.92)c='h3'; if(r>.97)c='h4';
+    html+=`<div class="hc ${c}"></div>`;
+  }
+  grid.innerHTML=html;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════════════════════ */
+function openLogin() {
+  document.getElementById('login-modal').classList.add('open');
+  document.getElementById('l-user').value='';
+  document.getElementById('l-pass').value='';
+  document.getElementById('l-err').style.display='none';
+  setTimeout(()=>document.getElementById('l-user').focus(),80);
+}
+function closeLogin(){ document.getElementById('login-modal').classList.remove('open'); }
+function doLogin(){
+  const u=document.getElementById('l-user').value.trim();
+  const p=document.getElementById('l-pass').value;
+  if(u===ADMIN_CREDS.user && p===ADMIN_CREDS.pass){
+    isAdmin=true; closeLogin(); showAdmin();
+  } else {
+    document.getElementById('l-err').style.display='block';
+    document.getElementById('l-pass').value='';
+  }
+}
+function logout(){ isAdmin=false; showPublic(); }
+
+function showAdmin(){
+  document.getElementById('public-view').style.display='none';
+  document.getElementById('admin-view').style.display='grid';
+  document.getElementById('admin-user-label').textContent='ruirui2';
+  fillAdminForms();
+  renderAdminAll();
+}
+function viewPublic(){ showPublic(); }
+function showPublic(){
+  document.getElementById('admin-view').style.display='none';
+  document.getElementById('public-view').style.display='block';
+  renderPublicView();
+}
+
+function aSwitch(id, btn){
+  document.querySelectorAll('.asec').forEach(s=>s.classList.remove('active'));
+  document.getElementById('asec-'+id).classList.add('active');
+  document.querySelectorAll('.a-nav-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ═══════════════════════════════════════════════════════
+   PROFILE
+═══════════════════════════════════════════════════════ */
+function fillAdminForms(){
+  const p = db.profile||{};
+  setVal('f-name',p.name); setVal('f-handle',p.handle);
+  setVal('f-bio',p.bio); setVal('f-loc',p.location);
+  setVal('f-company',p.company); setVal('f-email',p.email);
+  setVal('f-github',p.github); setVal('f-linkedin',p.linkedin);
+  setVal('f-twitter',p.twitter); setVal('f-website',p.website);
+  setVal('f-learning',p.learning); setVal('f-langs',p.langs);
+  setVal('f-repos',p.repoCount); setVal('f-commits',p.commitCount); setVal('f-stars',p.starCount);
+}
+function saveProfile(){
+  db.profile = {
+    name:     gVal('f-name')||'Rui Rui',
+    handle:   gVal('f-handle')||'@ruirui2',
+    bio:      gVal('f-bio'),
+    location: gVal('f-loc'),
+    company:  gVal('f-company'),
+    email:    gVal('f-email'),
+    github:   gVal('f-github'),
+    linkedin: gVal('f-linkedin'),
+    twitter:  gVal('f-twitter'),
+    website:  gVal('f-website'),
+    learning: gVal('f-learning'),
+    langs:    gVal('f-langs'),
+    repoCount:  parseInt(gVal('f-repos'))||0,
+    commitCount:parseInt(gVal('f-commits'))||0,
+    starCount:  parseInt(gVal('f-stars'))||0,
+  };
+  saveLocal();
+  toast('Profile saved! Export JSON to publish to GitHub.');
+}
+
+/* ═══════════════════════════════════════════════════════
+   IMPORT — RESUME BUILDER JSON
+═══════════════════════════════════════════════════════ */
+function importResumeBuilder(file){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const d = JSON.parse(e.target.result);
+      let imported = 0;
+
+      // Profile
+      if(d.profile){
+        const rp = d.profile;
+        db.profile = {
+          ...db.profile,
+          name:     rp.name     || db.profile.name,
+          bio:      rp.summary  || db.profile.bio,
+          location: rp.location || db.profile.location,
+          email:    rp.email    || db.profile.email,
+        };
+        if(d.ghUrl)  db.profile.github  = d.ghUrl;
+        if(d.liUrl)  db.profile.linkedin = d.liUrl;
+        imported++;
+      }
+
+      // Experience
+      if(d.experience && d.experience.length){
+        db.experience = d.experience.filter(e=>e.org||e.role).map(e=>({
+          id: Date.now()+Math.random(),
+          role:    e.role||'',
+          company: e.org||'',
+          org:     e.org||'',
+          period:  (e.start||'')+(e.end?' – '+e.end:''),
+          start:   e.start||'',
+          end:     e.end||'',
+          type:    e.type||'position',
+          bullets: e.bullets||'',
+        }));
+        imported++;
+      }
+
+      // Education
+      if(d.education && d.education.length){
+        db.education = d.education.filter(e=>e.school).map(e=>({
+          id: Date.now()+Math.random(),
+          school: e.school||'',
+          degree: e.degree||'',
+          year:   e.gradYear||e.year||'',
+          gradYear:e.gradYear||'',
+          gpa:    e.gpa||'',
+          honors: Array.isArray(e.honors)?e.honors:(e.honors?[e.honors]:[]),
+          activities:e.activities||'',
+        }));
+        imported++;
+      }
+
+      // Skills — pull ratings from skillRatings
+      if(d.skills){
+        const ratings = d.skillRatings||{};
+        const vis = d.skillVisibility||{};
+        const allSkillNames = [
+          ...(d.skills.technical||'').split(','),
+          ...(d.skills.tools||'').split(','),
+          ...(d.skills.certifications||'').split(','),
+          ...(d.skills.soft||'').split(','),
+        ].map(s=>s.trim()).filter(s=>s && vis[s]!==false);
+        db.skills = allSkillNames.map((name,i)=>({
+          id: i+Date.now(),
+          name,
+          rating: getRate(name, ratings),
+        }));
+        imported++;
+
+        // Certifications — extract from certifications field
+        const certs = (d.skills.certifications||'').split(',').map(s=>s.trim()).filter(Boolean);
+        if(certs.length){
+          db.certifications = certs.map(c=>({ name:c, issuer:'' }));
+        }
+      }
+
+      saveLocal();
+      renderAdminAll();
+      el('rb-import-status').textContent = `✅ Imported ${imported} sections successfully. Review each tab, then Export to publish.`;
+      el('rb-import-status').style.color = 'var(--accent2)';
+      toast('Resume Builder data imported!');
+    } catch(err){
+      el('rb-import-status').textContent = '❌ Error: '+err.message;
+      el('rb-import-status').style.color = 'var(--danger)';
+    }
+  };
+  reader.readAsText(file);
+}
+
+function getRate(name, ratings){
+  if(!ratings||!Object.keys(ratings).length) return 5;
+  if(ratings[name]!=null) return ratings[name];
+  const nl = name.toLowerCase();
+  for(const[k,v] of Object.entries(ratings)){
+    if(k.toLowerCase()===nl) return v;
+    if(nl.includes(k.toLowerCase())||k.toLowerCase().includes(nl)) return v;
+  }
+  return 5;
+}
+
+/* ═══════════════════════════════════════════════════════
+   IMPORT — PORTFOLIO JSON
+═══════════════════════════════════════════════════════ */
+function importPortfolioJSON(file){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const d = JSON.parse(e.target.result);
+      db = { ...getDefaultDB(), ...d };
+      db.files        = db.files        || [];
+      db.skills       = db.skills       || [];
+      db.projects     = db.projects     || [];
+      db.experience   = db.experience   || [];
+      db.education    = db.education    || [];
+      db.certifications = db.certifications || [];
+      saveLocal();
+      fillAdminForms();
+      renderAdminAll();
+      el('pf-import-status').textContent = '✅ Portfolio data restored successfully.';
+      el('pf-import-status').style.color = 'var(--accent2)';
+      toast('Portfolio JSON restored!');
+    } catch(err){
+      el('pf-import-status').textContent = '❌ Error: '+err.message;
+      el('pf-import-status').style.color = 'var(--danger)';
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* ═══════════════════════════════════════════════════════
+   FILES
+═══════════════════════════════════════════════════════ */
+function handleFiles(files){
+  Array.from(files).forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      if(e.target.result.length > 3*1024*1024){
+        toast('File too large (>2MB): '+file.name, true); return;
+      }
+      db.files.push({
+        id: Date.now()+Math.random(),
+        name: file.name, type: file.type, size: file.size,
+        dataUrl: e.target.result, uploadedAt: new Date().toISOString()
+      });
+      saveLocal();
+      renderAdminFiles();
+      toast('Uploaded: '+file.name);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function deleteFile(id){
+  db.files = db.files.filter(f=>String(f.id)!==String(id));
+  saveLocal(); renderAdminFiles();
+}
+function renderAdminFiles(){
+  const list = el('a-file-list');
+  if(!db.files.length){ list.innerHTML=emptyState('📂','No files uploaded yet.'); return; }
+  list.innerHTML = db.files.map(f=>`
+    <div class="a-row">
+      <div class="a-row-icon">${fileIcon(f.name)}</div>
+      <div class="a-row-info">
+        <div class="a-row-name">${h(f.name)}</div>
+        <div class="a-row-meta">${fmtBytes(f.size)} · ${fmtDate(f.uploadedAt)}</div>
+      </div>
+      <div class="a-row-actions">
+        <a class="btn btn-sm btn-primary" href="${f.dataUrl}" download="${h(f.name)}">⬇</a>
+        <button class="btn btn-sm btn-danger" onclick="deleteFile('${f.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   SKILLS
+═══════════════════════════════════════════════════════ */
+function addSkill(){
+  const name = gVal('ns-name').trim();
+  if(!name){ toast('Enter a skill name.', true); return; }
+  db.skills.push({ id: Date.now(), name, rating: parseInt(gVal('ns-rating'))||5 });
+  setVal('ns-name',''); setVal('ns-rating',5);
+  document.getElementById('ns-val').textContent='5';
+  saveLocal(); renderAdminSkills();
+}
+function updateSkillRating(id, val){
+  const s = db.skills.find(s=>String(s.id)===String(id));
+  if(s){ s.rating=parseInt(val); saveLocal(); }
+}
+function deleteSkill(id){
+  db.skills = db.skills.filter(s=>String(s.id)!==String(id));
+  saveLocal(); renderAdminSkills();
+}
+function renderAdminSkills(){
+  const list = el('a-skill-list');
+  if(!db.skills.length){ list.innerHTML=emptyState('⭐','No skills added yet.'); return; }
+  list.innerHTML = db.skills.map(s=>`
+    <div class="a-row">
+      <div class="a-row-icon">⭐</div>
+      <div class="a-row-info"><div class="a-row-name">${h(s.name)}</div></div>
+      <div class="skill-a-rating">
+        <input type="range" min="0" max="10" value="${s.rating||0}"
+          oninput="this.nextElementSibling.textContent=this.value;updateSkillRating('${s.id}',this.value)"/>
+        <span class="skill-a-val">${s.rating||0}</span>
+      </div>
+      <div class="a-row-actions">
+        <button class="btn btn-sm btn-danger" onclick="deleteSkill('${s.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   PROJECTS
+═══════════════════════════════════════════════════════ */
+function addProject(){
+  const name = gVal('np-name').trim();
+  if(!name){ toast('Enter a project name.', true); return; }
+  if(db.projects.length>=6){ toast('Max 6 pinned projects.', true); return; }
+  const lang = gVal('np-lang').trim()||'Other';
+  db.projects.push({ id:Date.now(), name, desc:gVal('np-desc').trim(), lang, url:gVal('np-url').trim()||'#', color:LANG_COLORS[lang]||LANG_COLORS.Other });
+  ['np-name','np-desc','np-lang','np-url'].forEach(i=>setVal(i,''));
+  saveLocal(); renderAdminProjects();
+}
+function deleteProject(id){
+  db.projects = db.projects.filter(p=>String(p.id)!==String(id));
+  saveLocal(); renderAdminProjects();
+}
+function renderAdminProjects(){
+  const list = el('a-proj-list');
+  if(!db.projects.length){ list.innerHTML=emptyState('🚀','No projects added yet.'); return; }
+  list.innerHTML = db.projects.map(p=>`
+    <div class="a-row">
+      <div class="a-row-icon">📦</div>
+      <div class="a-row-info">
+        <div class="a-row-name">${h(p.name)}</div>
+        <div class="a-row-meta">${h(p.lang)} · ${h(p.desc)}</div>
+      </div>
+      <div class="a-row-actions">
+        <button class="btn btn-sm btn-danger" onclick="deleteProject('${p.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   EXPERIENCE
+═══════════════════════════════════════════════════════ */
+function addExp(){
+  const role = gVal('ne-role').trim();
+  const org  = gVal('ne-org').trim();
+  if(!role&&!org){ toast('Enter a role or organization.', true); return; }
+  db.experience.push({
+    id:Date.now(), role, company:org, org,
+    period:gVal('ne-period').trim(), type:gVal('ne-type'),
+    bullets:gVal('ne-bullets').trim()
+  });
+  ['ne-role','ne-org','ne-period','ne-bullets'].forEach(i=>setVal(i,''));
+  saveLocal(); renderAdminExp();
+}
+function deleteExp(id){
+  db.experience = db.experience.filter(e=>String(e.id)!==String(id));
+  saveLocal(); renderAdminExp();
+}
+function renderAdminExp(){
+  const list = el('a-exp-list');
+  if(!db.experience.length){ list.innerHTML=emptyState('💼','No experience added yet. Import from Resume Builder or add manually.'); return; }
+  list.innerHTML = db.experience.map(e=>`
+    <div class="a-row">
+      <div class="a-row-icon">${expIcon(e.type)}</div>
+      <div class="a-row-info">
+        <div class="a-row-name">${h(e.role||e.org||'')}</div>
+        <div class="a-row-meta">${h(e.company||e.org||'')} · ${h(e.period||'')} · ${h(e.type||'')}</div>
+      </div>
+      <div class="a-row-actions">
+        <button class="btn btn-sm btn-danger" onclick="deleteExp('${e.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   EDUCATION
+═══════════════════════════════════════════════════════ */
+function addEdu(){
+  const school = gVal('ned-school').trim();
+  if(!school){ toast('Enter a school name.', true); return; }
+  const honorsRaw = gVal('ned-honors').trim();
+  db.education.push({
+    id:Date.now(), school, degree:gVal('ned-degree').trim(),
+    year:gVal('ned-year').trim(), gpa:gVal('ned-gpa').trim(),
+    honors:honorsRaw?honorsRaw.split(',').map(s=>s.trim()).filter(Boolean):[],
+  });
+  ['ned-school','ned-degree','ned-year','ned-gpa','ned-honors'].forEach(i=>setVal(i,''));
+  saveLocal(); renderAdminEdu();
+}
+function deleteEdu(id){
+  db.education = db.education.filter(e=>String(e.id)!==String(id));
+  saveLocal(); renderAdminEdu();
+}
+function renderAdminEdu(){
+  const list = el('a-edu-list');
+  if(!db.education.length){ list.innerHTML=emptyState('🎓','No education added yet.'); return; }
+  list.innerHTML = db.education.map(e=>`
+    <div class="a-row">
+      <div class="a-row-icon">🎓</div>
+      <div class="a-row-info">
+        <div class="a-row-name">${h(e.school)}</div>
+        <div class="a-row-meta">${h(e.degree)} · ${h(e.year||e.gradYear||'')}${e.gpa?' · GPA '+h(e.gpa):''}</div>
+      </div>
+      <div class="a-row-actions">
+        <button class="btn btn-sm btn-danger" onclick="deleteEdu('${e.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   RENDER ALL ADMIN LISTS
+═══════════════════════════════════════════════════════ */
+function renderAdminAll(){
+  renderAdminFiles();
+  renderAdminSkills();
+  renderAdminProjects();
+  renderAdminExp();
+  renderAdminEdu();
+}
+
+/* ═══════════════════════════════════════════════════════
+   EXPORT
+═══════════════════════════════════════════════════════ */
+function exportPortfolioJSON(){
+  // Strip _localSavedAt so fresh loads treat it as canonical remote
+  const out = { ...db };
+  delete out._localSavedAt;
+  out._source = 'portfolio-data.json';
+  out._exportedAt = new Date().toISOString();
+  downloadJSON(out, 'portfolio-data.json');
+  toast('Exported! Upload this file to your GitHub repo root to publish.');
+}
+function exportAllJSON(){
+  const out = { ...db, _exportedAt: new Date().toISOString() };
+  downloadJSON(out, 'portfolio-backup-'+Date.now()+'.json');
+  toast('Full backup exported.');
+}
+function downloadJSON(obj, name){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=name; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SETTINGS
+═══════════════════════════════════════════════════════ */
+function clearLocal(){
+  if(!confirm('Clear local edits? The site will reload from portfolio-data.json on GitHub next visit.')) return;
+  localStorage.removeItem(LS_KEY);
+  toast('Local data cleared. Reloading from GitHub next visit.');
+}
+
+/* ═══════════════════════════════════════════════════════
+   DRAG-AND-DROP
+═══════════════════════════════════════════════════════ */
+function setupDrop(zoneId, handler){
+  const z = document.getElementById(zoneId);
+  if(!z) return;
+  z.addEventListener('dragover', e=>{ e.preventDefault(); z.classList.add('drag'); });
+  z.addEventListener('dragleave', ()=>z.classList.remove('drag'));
+  z.addEventListener('drop', e=>{ e.preventDefault(); z.classList.remove('drag'); handler(e.dataTransfer.files[0]); });
+}
+setupDrop('rb-drop', importResumeBuilder);
+setupDrop('pf-drop', importPortfolioJSON);
+const fz = document.getElementById('file-zone');
+if(fz){
+  fz.addEventListener('dragover',e=>{e.preventDefault();fz.classList.add('drag');});
+  fz.addEventListener('dragleave',()=>fz.classList.remove('drag'));
+  fz.addEventListener('drop',e=>{e.preventDefault();fz.classList.remove('drag');handleFiles(e.dataTransfer.files);});
+}
+
+/* ═══════════════════════════════════════════════════════
    UTILS
-════════════════════════════════════════════════════ */
-function scrollTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function fbytes(b){if(!b)return'—';if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB'}
-function fdate(iso){try{return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}catch(e){return''}}
-function ficon(n){const ext=(n||'').split('.').pop().toLowerCase();return{pdf:'📄',html:'🌐',htm:'🌐',doc:'📝',docx:'📝',txt:'📃',png:'🖼️',jpg:'🖼️',jpeg:'🖼️',gif:'🖼️',zip:'🗜️',mp4:'🎬'}[ext]||'📁'}
+═══════════════════════════════════════════════════════ */
+function h(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function el(id){ return document.getElementById(id); }
+function gVal(id){ return (el(id)||{}).value||''; }
+function setVal(id,v){ const e=el(id); if(e) e.value=v||''; }
+function emptyState(icon,msg){ return `<div class="empty"><div class="empty-icon">${icon}</div><p>${msg}</p></div>`; }
+function scrollTo(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+function fmtBytes(b){
+  if(!b||b<0) return '—';
+  if(b<1024) return b+' B';
+  if(b<1048576) return (b/1024).toFixed(1)+' KB';
+  return (b/1048576).toFixed(1)+' MB';
+}
+function fmtDate(iso){ try{ return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }catch(e){ return ''; } }
+function fileIcon(name){
+  const ext=(name||'').split('.').pop().toLowerCase();
+  return {pdf:'📄',html:'🌐',htm:'🌐',doc:'📝',docx:'📝',txt:'📃',png:'🖼️',jpg:'🖼️',jpeg:'🖼️',gif:'🖼️',zip:'🗜️',mp4:'🎬',mp3:'🎵'}[ext]||'📁';
+}
+function expIcon(type){
+  return {internship:'🏢','full-time':'💼','part-time':'⏱',project:'🚀',research:'🔬',volunteer:'🤝','open source':'🌍'}[type]||'💼';
+}
+function bulletsHTML(bullets){
+  if(!bullets) return '';
+  const lines = typeof bullets==='string' ? bullets.split('\n').map(s=>s.trim()).filter(Boolean) : (Array.isArray(bullets)?bullets:[]);
+  return lines.map(b=>`<div class="exp-bullet">${h(b)}</div>`).join('');
+}
 
 let toastTimer;
-function toast(msg,isErr=false){
-  const t=document.getElementById('toast');
+function toast(msg, isErr=false){
+  const t=el('toast');
   t.textContent=(isErr?'❌ ':'✅ ')+msg;
   t.className='show'+(isErr?' err':'');
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.className='',3000);
+  toastTimer=setTimeout(()=>t.className='', 3200);
 }
 
-/* ════════════════════════════════════════════════════
-   DRAG & DROP
-════════════════════════════════════════════════════ */
-['rb-drop','pf-drop','file-drop'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el)return;
-  el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag')});
-  el.addEventListener('dragleave',()=>el.classList.remove('drag'));
-  el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag');const inp=el.querySelector('input[type=file]');if(!inp)return;const dt=e.dataTransfer;if(id==='file-drop')handleFiles(dt.files);else{const f=dt.files[0];if(id==='rb-drop')importResumeBuilder(f);else importPortfolioJSON(f);}});
-});
-
-/* ════════════════════════════════════════════════════
-   INIT
-════════════════════════════════════════════════════ */
-boot();
+/* ═══════════════════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════════════════ */
+init();
 </script>
 </body>
 </html>
