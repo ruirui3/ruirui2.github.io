@@ -203,18 +203,29 @@ label { display:block; font-size:11px; font-weight:700; letter-spacing:.08em; te
 }
 .section-head .sh-accent { color:var(--accent); }
 
-/* Projects */
-.projects-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:32px; }
+/* Projects — image preview cards */
+.projects-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:32px; }
 .proj-card {
   background:var(--card); border:1px solid var(--border); border-radius:var(--r);
-  padding:16px; display:flex; flex-direction:column; gap:8px;
+  display:flex; flex-direction:column; overflow:hidden;
   transition:border-color .2s, transform .2s, box-shadow .2s; text-decoration:none; color:inherit;
 }
-.proj-card:hover { border-color:var(--accent); transform:translateY(-3px); box-shadow:0 8px 30px rgba(79,140,255,.12); text-decoration:none; }
-.proj-card-name { font-size:14px; font-weight:600; color:var(--accent); font-family:var(--fh); }
+.proj-card:hover { border-color:var(--accent); transform:translateY(-3px); box-shadow:0 8px 32px rgba(79,140,255,.15); text-decoration:none; }
+.proj-thumb {
+  width:100%; aspect-ratio:16/9; object-fit:cover; display:block;
+  background:var(--surface); border-bottom:1px solid var(--border);
+}
+.proj-thumb-placeholder {
+  width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#080818,#0e0e2a); border-bottom:1px solid var(--border);
+  font-size:36px; color:var(--muted);
+}
+.proj-body { padding:14px 16px; display:flex; flex-direction:column; gap:6px; flex:1; }
+.proj-card-name { font-size:14px; font-weight:700; color:var(--accent); font-family:var(--fh); }
 .proj-card-desc { font-size:12px; color:var(--text-dim); flex:1; line-height:1.55; }
-.proj-card-foot { display:flex; gap:14px; font-size:12px; color:var(--muted); align-items:center; }
+.proj-card-foot { display:flex; gap:10px; align-items:center; margin-top:4px; flex-wrap:wrap; }
 .lang-dot { width:10px; height:10px; border-radius:50%; display:inline-block; flex-shrink:0; }
+.proj-visit { font-size:11px; font-weight:700; color:var(--accent); margin-left:auto; letter-spacing:.04em; }
 
 /* Experience */
 .exp-list { display:flex; flex-direction:column; gap:14px; margin-bottom:32px; }
@@ -249,18 +260,7 @@ label { display:block; font-size:11px; font-weight:700; letter-spacing:.08em; te
 .skill-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#1f3faf,var(--accent)); transition:width 1.2s cubic-bezier(.4,0,.2,1); }
 .skill-val { width:36px; font-size:11px; color:var(--muted); text-align:right; font-family:var(--fm); }
 
-/* Documents */
-.docs-list { display:flex; flex-direction:column; gap:9px; margin-bottom:32px; }
-.doc-card {
-  background:var(--card); border:1px solid var(--border); border-radius:var(--r);
-  padding:13px 16px; display:flex; align-items:center; gap:12px;
-  transition:border-color .2s;
-}
-.doc-card:hover { border-color:var(--accent); }
-.doc-icon { font-size:22px; flex-shrink:0; }
-.doc-info { flex:1; }
-.doc-name { font-size:13px; font-weight:600; color:var(--accent); }
-.doc-meta { font-size:11px; color:var(--muted); }
+/* (documents section removed — projects use image cards now) */
 
 /* Heatmap */
 .heatmap-grid { display:grid; grid-template-columns:repeat(52,1fr); gap:2px; margin-top:10px; }
@@ -487,9 +487,9 @@ footer {
           <span id="pub-status">Available for opportunities</span>
         </div>
         <div class="hero-actions">
-          <button class="btn btn-green" onclick="scrollTo('docs-section')">📄 Resume</button>
           <button class="btn btn-primary" onclick="scrollTo('projects-section')">🚀 Projects</button>
           <button class="btn" onclick="scrollTo('skills-section')">⭐ Skills</button>
+          <button class="btn" onclick="scrollTo('exp-section')">💼 Experience</button>
         </div>
       </div>
     </div>
@@ -511,9 +511,9 @@ footer {
         <div class="edu-list" id="pub-edu"></div>
       </div>
 
-      <!-- Pinned Projects -->
+      <!-- Pinned Projects (image + link) -->
       <div id="projects-section" style="margin-bottom:32px;">
-        <div class="section-head"><span class="sh-accent">▸</span> Pinned Repositories</div>
+        <div class="section-head"><span class="sh-accent">▸</span> Projects</div>
         <div class="projects-grid" id="pub-projects"></div>
       </div>
 
@@ -527,12 +527,6 @@ footer {
       <div id="skills-section" style="margin-bottom:32px;">
         <div class="section-head"><span class="sh-accent">▸</span> Technical Skills</div>
         <div class="skills-list" id="pub-skills"></div>
-      </div>
-
-      <!-- Documents -->
-      <div id="docs-section" style="margin-bottom:32px;">
-        <div class="section-head"><span class="sh-accent">▸</span> Documents &amp; Files</div>
-        <div class="docs-list" id="pub-docs"></div>
       </div>
 
       <!-- Contribution heatmap -->
@@ -594,7 +588,6 @@ footer {
   <div id="admin-sidebar">
     <button class="a-nav-item active" onclick="aSwitch('profile',this)">👤 Profile</button>
     <button class="a-nav-item" onclick="aSwitch('import',this)">📥 Import</button>
-    <button class="a-nav-item" onclick="aSwitch('files',this)">📁 Files</button>
     <button class="a-nav-item" onclick="aSwitch('skills',this)">⭐ Skills</button>
     <button class="a-nav-item" onclick="aSwitch('projects',this)">🚀 Projects</button>
     <button class="a-nav-item" onclick="aSwitch('exp',this)">💼 Experience</button>
@@ -670,17 +663,33 @@ footer {
       </div>
     </div>
 
-    <!-- FILES -->
-    <div class="asec" id="asec-files">
-      <div class="asec-title">Files &amp; Documents</div>
-      <div class="asec-sub">Upload files shown to visitors on the public portfolio. Stored as base64 in the exported JSON. Keep files small (&lt;2MB each) for best performance.</div>
-      <div class="upload-zone" id="file-zone">
-        <input type="file" id="file-input" multiple accept=".pdf,.html,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif,.zip" onchange="handleFiles(this.files)"/>
-        <div class="uz-icon">📁</div>
-        <div class="uz-text"><strong>Click to upload</strong> or drag and drop</div>
-        <div class="uz-sub">PDF, HTML, DOC, Images, ZIP · Max ~2MB per file</div>
+    <!-- PROJECTS -->
+    <div class="asec" id="asec-projects">
+      <div class="asec-title">Projects</div>
+      <div class="asec-sub">Add projects with a preview image and a link. The image is what visitors see — take a screenshot of your project and upload it. Up to 8 projects.</div>
+
+      <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:22px;">
+        <div style="font-size:13px;font-weight:700;color:var(--accent3);margin-bottom:14px;">Add New Project</div>
+        <div class="profile-grid" style="margin-bottom:12px;">
+          <div class="field"><label>Project Name</label><input id="np-name" placeholder="OpenClaw AI"/></div>
+          <div class="field"><label>Link URL</label><input id="np-url" placeholder="https://github.com/you/project"/></div>
+          <div class="field" style="grid-column:1/-1"><label>Description</label><input id="np-desc" placeholder="Short description shown under the image"/></div>
+          <div class="field"><label>Language / Tech Tag</label><input id="np-lang" placeholder="Python"/></div>
+        </div>
+        <!-- Image upload zone -->
+        <label style="margin-bottom:8px;">Preview Image <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">(screenshot, PNG/JPG, max 2MB)</span></label>
+        <div class="upload-zone" id="proj-img-zone" style="padding:28px;margin-bottom:12px;">
+          <input type="file" id="proj-img-input" accept="image/png,image/jpeg,image/gif,image/webp" onchange="handleProjImage(this.files[0])"/>
+          <div class="uz-icon" id="proj-img-preview-icon">🖼️</div>
+          <div class="uz-text">Click or drop a screenshot</div>
+          <div class="uz-sub">PNG · JPG · GIF · WebP</div>
+          <img id="proj-img-preview" style="display:none;max-width:100%;max-height:160px;border-radius:6px;margin-top:10px;border:1px solid var(--border);" alt="preview"/>
+        </div>
+        <button class="btn btn-green" onclick="addProject()">+ Add Project</button>
+        <button class="btn btn-sm" onclick="clearProjForm()" style="margin-left:8px;">Clear</button>
       </div>
-      <div class="a-list" id="a-file-list"></div>
+
+      <div class="a-list" id="a-proj-list"></div>
     </div>
 
     <!-- SKILLS -->
@@ -696,20 +705,6 @@ footer {
         <button class="btn btn-green" onclick="addSkill()" style="height:38px;align-self:flex-end;">+ Add</button>
       </div>
       <div class="a-list" id="a-skill-list"></div>
-    </div>
-
-    <!-- PROJECTS -->
-    <div class="asec" id="asec-projects">
-      <div class="asec-title">Pinned Projects</div>
-      <div class="asec-sub">Up to 6 pinned repositories shown on the public portfolio.</div>
-      <div class="add-strip add-strip-4">
-        <div class="field"><label>Name</label><input id="np-name" placeholder="my-project"/></div>
-        <div class="field"><label>Description</label><input id="np-desc" placeholder="Short description"/></div>
-        <div class="field"><label>Language</label><input id="np-lang" placeholder="Python"/></div>
-        <div class="field"><label>Repo URL (optional)</label><input id="np-url" placeholder="https://github.com/..."/></div>
-      </div>
-      <button class="btn btn-green" style="margin-bottom:20px;" onclick="addProject()">+ Add Project</button>
-      <div class="a-list" id="a-proj-list"></div>
     </div>
 
     <!-- EXPERIENCE -->
@@ -879,7 +874,6 @@ async function init() {
   }
 
   // Ensure all arrays exist
-  db.files        = db.files        || [];
   db.skills       = db.skills       || [];
   db.projects     = db.projects     || [];
   db.experience   = db.experience   || [];
@@ -893,7 +887,7 @@ async function init() {
 function getDefaultDB() {
   return {
     profile:{name:'Rui Rui',handle:'@ruirui2',bio:'Developer & builder.',location:'Seattle, WA',company:'Open to Internships',email:'',github:'',linkedin:'',twitter:'',website:'',learning:'',langs:'',repoCount:0,commitCount:0,starCount:0},
-    skills:[],projects:[],files:[],experience:[],education:[],certifications:[],_version:1
+    skills:[],projects:[],experience:[],education:[],certifications:[],_version:1
   };
 }
 
@@ -974,8 +968,6 @@ function renderPublicView() {
   renderPubCerts();
   // Skills
   renderPubSkills();
-  // Documents
-  renderPubDocs();
   // Heatmap
   renderHeatmap();
 }
@@ -1012,14 +1004,19 @@ function renderPubEdu() {
 function renderPubProjects() {
   const list = db.projects || [];
   const el2 = el('pub-projects');
-  if(!list.length){ el2.innerHTML=emptyState('🚀','No projects pinned yet.'); return; }
+  if(!list.length){ el2.innerHTML=emptyState('🚀','No projects added yet.'); return; }
   el2.innerHTML = list.map(p=>`
-    <a class="proj-card" href="${h(p.url||'#')}" target="_blank">
-      <div class="proj-card-name">📦 ${h(p.name)}</div>
-      <div class="proj-card-desc">${h(p.desc||'')}</div>
-      <div class="proj-card-foot">
-        <span><span class="lang-dot" style="background:${p.color||'#8b949e'}"></span> ${h(p.lang||'')}</span>
-        <span>⭐ ${p.stars||Math.floor(Math.random()*40+2)}</span>
+    <a class="proj-card" href="${h(p.url||'#')}" target="_blank" rel="noopener">
+      ${p.imgUrl
+        ? `<img class="proj-thumb" src="${p.imgUrl}" alt="${h(p.name)} preview" loading="lazy"/>`
+        : `<div class="proj-thumb-placeholder">🚀</div>`}
+      <div class="proj-body">
+        <div class="proj-card-name">${h(p.name)}</div>
+        <div class="proj-card-desc">${h(p.desc||'')}</div>
+        <div class="proj-card-foot">
+          <span><span class="lang-dot" style="background:${p.color||'#8b949e'}"></span> ${h(p.lang||'')}</span>
+          <span class="proj-visit">Visit →</span>
+        </div>
       </div>
     </a>`).join('');
 }
@@ -1047,21 +1044,6 @@ function renderPubSkills() {
       <div class="skill-name">${h(s.name)}</div>
       <div class="skill-track"><div class="skill-fill" style="width:${(s.rating||0)*10}%"></div></div>
       <div class="skill-val">${s.rating||0}/10</div>
-    </div>`).join('');
-}
-
-function renderPubDocs() {
-  const list = db.files || [];
-  const el2 = el('pub-docs');
-  if(!list.length){ el2.innerHTML=emptyState('📁','No documents uploaded yet.'); return; }
-  el2.innerHTML = list.map(f=>`
-    <div class="doc-card">
-      <div class="doc-icon">${fileIcon(f.name)}</div>
-      <div class="doc-info">
-        <div class="doc-name">${h(f.name)}</div>
-        <div class="doc-meta">${fmtBytes(f.size)} · ${fmtDate(f.uploadedAt)}</div>
-      </div>
-      <a class="btn btn-primary btn-sm" href="${f.dataUrl}" download="${h(f.name)}">⬇ Download</a>
     </div>`).join('');
 }
 
@@ -1275,7 +1257,6 @@ function importPortfolioJSON(file){
     try{
       const d = JSON.parse(e.target.result);
       db = { ...getDefaultDB(), ...d };
-      db.files        = db.files        || [];
       db.skills       = db.skills       || [];
       db.projects     = db.projects     || [];
       db.experience   = db.experience   || [];
@@ -1296,47 +1277,35 @@ function importPortfolioJSON(file){
 }
 
 /* ═══════════════════════════════════════════════════════
-   FILES
+   PROJECT IMAGE — temp state while filling form
 ═══════════════════════════════════════════════════════ */
-function handleFiles(files){
-  Array.from(files).forEach(file=>{
-    const reader = new FileReader();
-    reader.onload = e=>{
-      if(e.target.result.length > 3*1024*1024){
-        toast('File too large (>2MB): '+file.name, true); return;
-      }
-      db.files.push({
-        id: Date.now()+Math.random(),
-        name: file.name, type: file.type, size: file.size,
-        dataUrl: e.target.result, uploadedAt: new Date().toISOString()
-      });
-      saveLocal();
-      renderAdminFiles();
-      toast('Uploaded: '+file.name);
-    };
-    reader.readAsDataURL(file);
-  });
+let _pendingProjImg = null; // { dataUrl, size }
+
+function handleProjImage(file){
+  if(!file) return;
+  if(file.size > 2.5*1024*1024){ toast('Image too large — keep under 2MB.', true); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    _pendingProjImg = { dataUrl: e.target.result, size: file.size };
+    const preview = document.getElementById('proj-img-preview');
+    const icon    = document.getElementById('proj-img-preview-icon');
+    preview.src   = e.target.result;
+    preview.style.display = 'block';
+    icon.style.display    = 'none';
+    toast('Image ready — fill in the fields and click Add Project.');
+  };
+  reader.readAsDataURL(file);
 }
-function deleteFile(id){
-  db.files = db.files.filter(f=>String(f.id)!==String(id));
-  saveLocal(); renderAdminFiles();
+
+function clearProjForm(){
+  ['np-name','np-url','np-desc','np-lang'].forEach(i=>setVal(i,''));
+  _pendingProjImg = null;
+  const preview = document.getElementById('proj-img-preview');
+  const icon    = document.getElementById('proj-img-preview-icon');
+  if(preview){ preview.src=''; preview.style.display='none'; }
+  if(icon)   { icon.style.display=''; }
 }
-function renderAdminFiles(){
-  const list = el('a-file-list');
-  if(!db.files.length){ list.innerHTML=emptyState('📂','No files uploaded yet.'); return; }
-  list.innerHTML = db.files.map(f=>`
-    <div class="a-row">
-      <div class="a-row-icon">${fileIcon(f.name)}</div>
-      <div class="a-row-info">
-        <div class="a-row-name">${h(f.name)}</div>
-        <div class="a-row-meta">${fmtBytes(f.size)} · ${fmtDate(f.uploadedAt)}</div>
-      </div>
-      <div class="a-row-actions">
-        <a class="btn btn-sm btn-primary" href="${f.dataUrl}" download="${h(f.name)}">⬇</a>
-        <button class="btn btn-sm btn-danger" onclick="deleteFile('${f.id}')">🗑</button>
-      </div>
-    </div>`).join('');
-}
+
 
 /* ═══════════════════════════════════════════════════════
    SKILLS
@@ -1381,11 +1350,22 @@ function renderAdminSkills(){
 function addProject(){
   const name = gVal('np-name').trim();
   if(!name){ toast('Enter a project name.', true); return; }
-  if(db.projects.length>=6){ toast('Max 6 pinned projects.', true); return; }
-  const lang = gVal('np-lang').trim()||'Other';
-  db.projects.push({ id:Date.now(), name, desc:gVal('np-desc').trim(), lang, url:gVal('np-url').trim()||'#', color:LANG_COLORS[lang]||LANG_COLORS.Other });
-  ['np-name','np-desc','np-lang','np-url'].forEach(i=>setVal(i,''));
-  saveLocal(); renderAdminProjects();
+  if(db.projects.length>=8){ toast('Max 8 projects.', true); return; }
+  const lang  = gVal('np-lang').trim()||'Other';
+  db.projects.push({
+    id:     Date.now(),
+    name,
+    desc:   gVal('np-desc').trim(),
+    lang,
+    url:    gVal('np-url').trim()||'#',
+    color:  LANG_COLORS[lang]||LANG_COLORS.Other,
+    imgUrl: _pendingProjImg ? _pendingProjImg.dataUrl : null,
+    imgSize:_pendingProjImg ? _pendingProjImg.size : 0,
+  });
+  clearProjForm();
+  saveLocal();
+  renderAdminProjects();
+  toast('Project added!');
 }
 function deleteProject(id){
   db.projects = db.projects.filter(p=>String(p.id)!==String(id));
@@ -1393,13 +1373,16 @@ function deleteProject(id){
 }
 function renderAdminProjects(){
   const list = el('a-proj-list');
-  if(!db.projects.length){ list.innerHTML=emptyState('🚀','No projects added yet.'); return; }
+  if(!db.projects.length){ list.innerHTML=emptyState('🚀','No projects added yet. Fill the form above to add one.'); return; }
   list.innerHTML = db.projects.map(p=>`
-    <div class="a-row">
-      <div class="a-row-icon">📦</div>
-      <div class="a-row-info">
+    <div class="a-row" style="align-items:flex-start;gap:14px;">
+      ${p.imgUrl
+        ? `<img src="${p.imgUrl}" style="width:80px;height:50px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border);" alt=""/>`
+        : `<div style="width:80px;height:50px;border-radius:6px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🖼️</div>`}
+      <div class="a-row-info" style="flex:1;">
         <div class="a-row-name">${h(p.name)}</div>
-        <div class="a-row-meta">${h(p.lang)} · ${h(p.desc)}</div>
+        <div class="a-row-meta">${h(p.lang)} · <a href="${h(p.url)}" target="_blank" style="color:var(--accent);font-size:11px;">${h(p.url.length>40?p.url.slice(0,40)+'…':p.url)}</a></div>
+        <div class="a-row-meta" style="margin-top:2px;">${h(p.desc||'')}</div>
       </div>
       <div class="a-row-actions">
         <button class="btn btn-sm btn-danger" onclick="deleteProject('${p.id}')">🗑</button>
@@ -1481,7 +1464,6 @@ function renderAdminEdu(){
    RENDER ALL ADMIN LISTS
 ═══════════════════════════════════════════════════════ */
 function renderAdminAll(){
-  renderAdminFiles();
   renderAdminSkills();
   renderAdminProjects();
   renderAdminExp();
@@ -1534,12 +1516,6 @@ function setupDrop(zoneId, handler){
 }
 setupDrop('rb-drop', importResumeBuilder);
 setupDrop('pf-drop', importPortfolioJSON);
-const fz = document.getElementById('file-zone');
-if(fz){
-  fz.addEventListener('dragover',e=>{e.preventDefault();fz.classList.add('drag');});
-  fz.addEventListener('dragleave',()=>fz.classList.remove('drag'));
-  fz.addEventListener('drop',e=>{e.preventDefault();fz.classList.remove('drag');handleFiles(e.dataTransfer.files);});
-}
 
 /* ═══════════════════════════════════════════════════════
    UTILS
