@@ -445,6 +445,41 @@ footer {
 
 /* Import source indicator */
 .import-src { font-size:11px; font-family:var(--fm); color:var(--muted); opacity:.7; margin-top:-20px; margin-bottom:24px; }
+
+/* ── PROJECTS PAGE (full-page public tab) ───────────── */
+#projects-page { display:none; min-height:100vh; position:relative; z-index:1; }
+#projects-page.active { display:block; }
+#home-content.hidden { display:none; }
+
+/* Folder tabs on projects page */
+.folder-tabs { display:flex; gap:8px; flex-wrap:wrap; padding:28px 28px 0; max-width:1140px; margin:0 auto; }
+.folder-tab {
+  display:flex; align-items:center; gap:6px;
+  padding:8px 18px; border-radius:8px; border:1px solid var(--border2);
+  font-size:13px; font-weight:600; cursor:pointer; font-family:var(--ff);
+  background:var(--surface); color:var(--muted); transition:all .15s;
+}
+.folder-tab:hover { border-color:var(--accent); color:var(--text); }
+.folder-tab.active { background:rgba(79,140,255,.15); border-color:rgba(79,140,255,.5); color:var(--accent); }
+.folder-tab .f-count { font-size:10px; padding:1px 6px; border-radius:999px; background:rgba(255,255,255,.08); font-family:var(--fm); }
+
+/* Projects page grid */
+.proj-page-grid { max-width:1140px; margin:0 auto; padding:24px 28px 80px; display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:18px; }
+
+/* Folder section heading inside grid */
+.folder-section { grid-column:1/-1; margin-top:14px; }
+.folder-section-head { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.folder-section-head::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Admin: folder chip */
+.folder-chip { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:700; background:rgba(155,114,207,.12); color:var(--purple); border:1px solid rgba(155,114,207,.25); }
+
+/* Admin: folder manager */
+.folder-mgr { background:var(--card); border:1px solid var(--border2); border-radius:var(--r); padding:16px 18px; margin-bottom:20px; }
+.folder-mgr-title { font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:10px; }
+.folder-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+.folder-chip-del { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:600; cursor:pointer; background:rgba(155,114,207,.1); color:var(--purple); border:1px solid rgba(155,114,207,.25); transition:all .15s; }
+.folder-chip-del:hover { background:rgba(248,81,73,.1); color:var(--danger); border-color:rgba(248,81,73,.3); }
 </style>
 </head>
 <body>
@@ -460,11 +495,10 @@ footer {
       <span id="nav-name">Portfolio</span>
     </div>
     <div class="nav-links">
-      <button class="nav-link" onclick="scrollTo('about-section')">About</button>
-      <button class="nav-link" onclick="scrollTo('exp-section')">Experience</button>
-      <button class="nav-link" onclick="scrollTo('projects-section')">Projects</button>
-      <button class="nav-link" onclick="scrollTo('skills-section')">Skills</button>
-      <button class="nav-link" onclick="scrollTo('docs-section')">Docs</button>
+      <button class="nav-link" onclick="showHome()">About</button>
+      <button class="nav-link" onclick="showProjectsPage('__all__')">Projects</button>
+      <button class="nav-link" onclick="showHome();setTimeout(()=>scrollTo('skills-section'),80)">Skills</button>
+      <button class="nav-link" onclick="showHome();setTimeout(()=>scrollTo('resume-section'),80)">Resume</button>
       <button class="btn btn-primary btn-sm" onclick="openLogin()">✏️ Edit</button>
     </div>
   </nav>
@@ -487,9 +521,10 @@ footer {
           <span id="pub-status">Available for opportunities</span>
         </div>
         <div class="hero-actions">
-          <button class="btn btn-primary" onclick="scrollTo('projects-section')">🚀 Projects</button>
-          <button class="btn" onclick="scrollTo('skills-section')">⭐ Skills</button>
-          <button class="btn" onclick="scrollTo('exp-section')">💼 Experience</button>
+          <button class="btn btn-green" onclick="showHome();setTimeout(()=>scrollTo('resume-section'),80)">📄 Resume</button>
+          <button class="btn btn-primary" onclick="showProjectsPage('__all__')">🚀 Projects</button>
+          <button class="btn" onclick="showHome();setTimeout(()=>scrollTo('skills-section'),80)">⭐ Skills</button>
+          <button class="btn" onclick="showHome();setTimeout(()=>scrollTo('exp-section'),80)">💼 Experience</button>
         </div>
       </div>
     </div>
@@ -511,10 +546,13 @@ footer {
         <div class="edu-list" id="pub-edu"></div>
       </div>
 
-      <!-- Pinned Projects (image + link) -->
+      <!-- Pinned Projects teaser — shows up to 4, links to full Projects page -->
       <div id="projects-section" style="margin-bottom:32px;">
-        <div class="section-head"><span class="sh-accent">▸</span> Projects</div>
-        <div class="projects-grid" id="pub-projects"></div>
+        <div class="section-head" style="justify-content:space-between;">
+          <span><span class="sh-accent">▸</span> Projects</span>
+          <button class="btn btn-sm btn-primary" onclick="showProjectsPage('__all__')" style="font-size:11px;padding:4px 12px;">View all →</button>
+        </div>
+        <div class="projects-grid" id="pub-projects-teaser"></div>
       </div>
 
       <!-- Certifications -->
@@ -527,6 +565,12 @@ footer {
       <div id="skills-section" style="margin-bottom:32px;">
         <div class="section-head"><span class="sh-accent">▸</span> Technical Skills</div>
         <div class="skills-list" id="pub-skills"></div>
+      </div>
+
+      <!-- Resume -->
+      <div id="resume-section" style="margin-bottom:32px;">
+        <div class="section-head"><span class="sh-accent">▸</span> Resume</div>
+        <div id="pub-resume"></div>
       </div>
 
       <!-- Contribution heatmap -->
@@ -566,6 +610,14 @@ footer {
   <footer>
     <p>Built with ☄️ · GitHub Pages · <a href="#" onclick="openLogin();return false;">Admin</a></p>
   </footer>
+</div><!-- /#public-view -->
+
+<!-- ═══════════════════════════════════════════════════════
+     PROJECTS FULL PAGE (shown when nav "Projects" is clicked)
+═══════════════════════════════════════════════════════ -->
+<div id="projects-page">
+  <div class="folder-tabs" id="pub-folder-tabs"></div>
+  <div class="proj-page-grid" id="pub-projects-full"></div>
 </div>
 
 
@@ -592,6 +644,7 @@ footer {
     <button class="a-nav-item" onclick="aSwitch('projects',this)">🚀 Projects</button>
     <button class="a-nav-item" onclick="aSwitch('exp',this)">💼 Experience</button>
     <button class="a-nav-item" onclick="aSwitch('edu',this)">🎓 Education</button>
+    <button class="a-nav-item" onclick="aSwitch('resume',this)">📄 Resume</button>
     <button class="a-nav-item" onclick="aSwitch('export',this)">📤 Export</button>
     <button class="a-nav-item" onclick="aSwitch('settings',this)">⚙️ Settings</button>
   </div>
@@ -666,8 +719,19 @@ footer {
     <!-- PROJECTS -->
     <div class="asec" id="asec-projects">
       <div class="asec-title">Projects</div>
-      <div class="asec-sub">Add projects with a preview image and a link. The image is what visitors see — take a screenshot of your project and upload it. Up to 8 projects.</div>
+      <div class="asec-sub">Add unlimited projects with preview images, links, and optional folders. Visitors see all projects on a dedicated page with folder tabs.</div>
 
+      <!-- Folder manager -->
+      <div class="folder-mgr">
+        <div class="folder-mgr-title">📁 Folders (optional categories)</div>
+        <div class="folder-chips" id="admin-folder-chips"></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input id="new-folder-name" placeholder="New folder name, e.g. AI · Web · Robotics" style="flex:1;"/>
+          <button class="btn btn-sm btn-amber" onclick="addFolder()" style="flex-shrink:0;">+ Add Folder</button>
+        </div>
+      </div>
+
+      <!-- Add project form -->
       <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:22px;">
         <div style="font-size:13px;font-weight:700;color:var(--accent3);margin-bottom:14px;">Add New Project</div>
         <div class="profile-grid" style="margin-bottom:12px;">
@@ -675,8 +739,10 @@ footer {
           <div class="field"><label>Link URL</label><input id="np-url" placeholder="https://github.com/you/project"/></div>
           <div class="field" style="grid-column:1/-1"><label>Description</label><input id="np-desc" placeholder="Short description shown under the image"/></div>
           <div class="field"><label>Language / Tech Tag</label><input id="np-lang" placeholder="Python"/></div>
+          <div class="field"><label>Folder <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);">(optional)</span></label>
+            <select id="np-folder"><option value="">— No folder —</option></select>
+          </div>
         </div>
-        <!-- Image upload zone -->
         <label style="margin-bottom:8px;">Preview Image <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">(screenshot, PNG/JPG, max 2MB)</span></label>
         <div class="upload-zone" id="proj-img-zone" style="padding:28px;margin-bottom:12px;">
           <input type="file" id="proj-img-input" accept="image/png,image/jpeg,image/gif,image/webp" onchange="handleProjImage(this.files[0])"/>
@@ -689,6 +755,7 @@ footer {
         <button class="btn btn-sm" onclick="clearProjForm()" style="margin-left:8px;">Clear</button>
       </div>
 
+      <div id="a-proj-count" style="font-size:12px;color:var(--muted);margin-bottom:10px;font-family:var(--fm);"></div>
       <div class="a-list" id="a-proj-list"></div>
     </div>
 
@@ -737,6 +804,37 @@ footer {
       <div class="field"><label>Honors / Awards (comma-separated)</label><input id="ned-honors" placeholder="AP Calculus AB: 5, Honor Roll, CCNA Certified"/></div>
       <button class="btn btn-green" style="margin-bottom:20px;" onclick="addEdu()">+ Add School</button>
       <div class="a-list" id="a-edu-list"></div>
+    </div>
+
+    <!-- RESUME -->
+    <div class="asec" id="asec-resume">
+      <div class="asec-title">Resume</div>
+      <div class="asec-sub">Upload your resume PDF. Visitors will see a download button and an inline preview on the public portfolio.</div>
+
+      <div class="upload-zone" id="resume-zone" style="padding:36px;">
+        <input type="file" id="resume-input" accept=".pdf" onchange="handleResumeUpload(this.files[0])"/>
+        <div class="uz-icon">📄</div>
+        <div class="uz-text"><strong>Click to upload</strong> or drag and drop</div>
+        <div class="uz-sub">PDF only · Max 5MB</div>
+      </div>
+
+      <div id="resume-admin-preview" style="display:none;">
+        <div class="a-row" style="margin-bottom:18px;">
+          <div class="a-row-icon">📄</div>
+          <div class="a-row-info">
+            <div class="a-row-name" id="resume-admin-name"></div>
+            <div class="a-row-meta" id="resume-admin-meta"></div>
+          </div>
+          <div class="a-row-actions">
+            <a class="btn btn-sm btn-primary" id="resume-admin-dl">⬇ Download</a>
+            <button class="btn btn-sm btn-danger" onclick="deleteResume()">🗑 Remove</button>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Preview</div>
+        <iframe id="resume-admin-iframe"
+          style="width:100%;height:700px;border:1px solid var(--border);border-radius:var(--r);background:#fff;"
+          title="Resume preview"></iframe>
+      </div>
     </div>
 
     <!-- EXPORT -->
@@ -876,10 +974,12 @@ async function init() {
   // Ensure all arrays exist
   db.skills       = db.skills       || [];
   db.projects     = db.projects     || [];
+  db.folders      = db.folders      || [];
   db.experience   = db.experience   || [];
   db.education    = db.education    || [];
   db.certifications = db.certifications || [];
   db.profile      = db.profile      || {};
+  if(db.resume === undefined) db.resume = null;
 
   renderPublicView();
 }
@@ -887,7 +987,7 @@ async function init() {
 function getDefaultDB() {
   return {
     profile:{name:'Rui Rui',handle:'@ruirui2',bio:'Developer & builder.',location:'Seattle, WA',company:'Open to Internships',email:'',github:'',linkedin:'',twitter:'',website:'',learning:'',langs:'',repoCount:0,commitCount:0,starCount:0},
-    skills:[],projects:[],experience:[],education:[],certifications:[],_version:1
+    skills:[],projects:[],folders:[],experience:[],education:[],certifications:[],resume:null,_version:1
   };
 }
 
@@ -962,14 +1062,99 @@ function renderPublicView() {
   renderPubExp();
   // Education
   renderPubEdu();
-  // Projects
-  renderPubProjects();
+  // Projects teaser (up to 4)
+  renderPubProjectsTeaser();
   // Certifications
   renderPubCerts();
   // Skills
   renderPubSkills();
+  // Resume
+  renderPubResume();
   // Heatmap
   renderHeatmap();
+}
+
+/* ═══════════════════════════════════════════════════════
+   PAGE SWITCHING — home vs projects page
+═══════════════════════════════════════════════════════ */
+let _activeFolder = '__all__';
+
+function showHome() {
+  document.getElementById('public-view').style.display = 'block';
+  document.getElementById('projects-page').classList.remove('active');
+  window.scrollTo(0,0);
+}
+
+function showProjectsPage(folder) {
+  _activeFolder = folder || '__all__';
+  document.getElementById('public-view').style.display = 'none';
+  document.getElementById('projects-page').classList.add('active');
+  renderProjectsPage();
+  window.scrollTo(0,0);
+}
+
+function renderProjectsPage() {
+  const allProjects = db.projects || [];
+  const folders = db.folders || [];
+
+  // Build folder tabs
+  const tabsEl = el('pub-folder-tabs');
+  const counts = {};
+  allProjects.forEach(p => {
+    const f = p.folder || '';
+    counts[f] = (counts[f]||0) + 1;
+  });
+
+  let tabsHTML = `<button class="folder-tab ${_activeFolder==='__all__'?'active':''}" onclick="showProjectsPage('__all__')">
+    All <span class="f-count">${allProjects.length}</span>
+  </button>`;
+  // Unfiled tab (only if some projects have no folder)
+  const unfiledCount = allProjects.filter(p=>!p.folder).length;
+  if(unfiledCount > 0 && folders.length > 0) {
+    tabsHTML += `<button class="folder-tab ${_activeFolder==='__none__'?'active':''}" onclick="showProjectsPage('__none__')">
+      Uncategorized <span class="f-count">${unfiledCount}</span>
+    </button>`;
+  }
+  folders.forEach(f => {
+    const cnt = counts[f] || 0;
+    tabsHTML += `<button class="folder-tab ${_activeFolder===f?'active':''}" onclick="showProjectsPage('${h(f).replace(/'/g,'&#39;')}')">
+      📁 ${h(f)} <span class="f-count">${cnt}</span>
+    </button>`;
+  });
+  // Back to home button
+  tabsHTML += `<button class="folder-tab" onclick="showHome()" style="margin-left:auto;color:var(--muted);">← Back</button>`;
+  tabsEl.innerHTML = tabsHTML;
+
+  // Filter projects
+  let filtered = allProjects;
+  if (_activeFolder === '__none__') filtered = allProjects.filter(p=>!p.folder);
+  else if (_activeFolder !== '__all__') filtered = allProjects.filter(p=>p.folder===_activeFolder);
+
+  const gridEl = el('pub-projects-full');
+  if(!filtered.length) {
+    gridEl.innerHTML = `<div style="grid-column:1/-1;">${emptyState('🚀','No projects in this folder yet.')}</div>`;
+    return;
+  }
+
+  // If showing all and folders exist, group by folder
+  if(_activeFolder === '__all__' && folders.length > 0) {
+    let html = '';
+    // Ungrouped first
+    const ungrouped = filtered.filter(p=>!p.folder);
+    if(ungrouped.length) {
+      html += `<div class="folder-section"><div class="folder-section-head">Uncategorized</div></div>`;
+      html += ungrouped.map(projCardHTML).join('');
+    }
+    folders.forEach(f => {
+      const fps = filtered.filter(p=>p.folder===f);
+      if(!fps.length) return;
+      html += `<div class="folder-section"><div class="folder-section-head">📁 ${h(f)}</div></div>`;
+      html += fps.map(projCardHTML).join('');
+    });
+    gridEl.innerHTML = html;
+  } else {
+    gridEl.innerHTML = filtered.map(projCardHTML).join('');
+  }
 }
 
 function renderPubExp() {
@@ -1001,24 +1186,28 @@ function renderPubEdu() {
     </div>`).join('');
 }
 
-function renderPubProjects() {
-  const list = db.projects || [];
-  const el2 = el('pub-projects');
-  if(!list.length){ el2.innerHTML=emptyState('🚀','No projects added yet.'); return; }
-  el2.innerHTML = list.map(p=>`
-    <a class="proj-card" href="${h(p.url||'#')}" target="_blank" rel="noopener">
-      ${p.imgUrl
-        ? `<img class="proj-thumb" src="${p.imgUrl}" alt="${h(p.name)} preview" loading="lazy"/>`
-        : `<div class="proj-thumb-placeholder">🚀</div>`}
-      <div class="proj-body">
-        <div class="proj-card-name">${h(p.name)}</div>
-        <div class="proj-card-desc">${h(p.desc||'')}</div>
-        <div class="proj-card-foot">
-          <span><span class="lang-dot" style="background:${p.color||'#8b949e'}"></span> ${h(p.lang||'')}</span>
-          <span class="proj-visit">Visit →</span>
-        </div>
+function projCardHTML(p) {
+  return `<a class="proj-card" href="${h(p.url||'#')}" target="_blank" rel="noopener">
+    ${p.imgUrl
+      ? `<img class="proj-thumb" src="${p.imgUrl}" alt="${h(p.name)} preview" loading="lazy"/>`
+      : `<div class="proj-thumb-placeholder">🚀</div>`}
+    <div class="proj-body">
+      <div class="proj-card-name">${h(p.name)}</div>
+      <div class="proj-card-desc">${h(p.desc||'')}</div>
+      <div class="proj-card-foot">
+        <span><span class="lang-dot" style="background:${p.color||'#8b949e'}"></span> ${h(p.lang||'')}</span>
+        ${p.folder ? `<span class="folder-chip">📁 ${h(p.folder)}</span>` : ''}
+        <span class="proj-visit">Visit →</span>
       </div>
-    </a>`).join('');
+    </div>
+  </a>`;
+}
+
+function renderPubProjectsTeaser() {
+  const list = (db.projects || []).slice(0, 4);
+  const el2 = el('pub-projects-teaser');
+  if(!list.length){ el2.innerHTML=emptyState('🚀','No projects added yet.'); return; }
+  el2.innerHTML = list.map(projCardHTML).join('');
 }
 
 function renderPubCerts() {
@@ -1259,6 +1448,7 @@ function importPortfolioJSON(file){
       db = { ...getDefaultDB(), ...d };
       db.skills       = db.skills       || [];
       db.projects     = db.projects     || [];
+      db.folders      = db.folders      || [];
       db.experience   = db.experience   || [];
       db.education    = db.education    || [];
       db.certifications = db.certifications || [];
@@ -1299,6 +1489,8 @@ function handleProjImage(file){
 
 function clearProjForm(){
   ['np-name','np-url','np-desc','np-lang'].forEach(i=>setVal(i,''));
+  const fsel = el('np-folder');
+  if(fsel) fsel.value = '';
   _pendingProjImg = null;
   const preview = document.getElementById('proj-img-preview');
   const icon    = document.getElementById('proj-img-preview-icon');
@@ -1345,12 +1537,48 @@ function renderAdminSkills(){
 }
 
 /* ═══════════════════════════════════════════════════════
+   FOLDERS
+═══════════════════════════════════════════════════════ */
+function addFolder() {
+  const name = gVal('new-folder-name').trim();
+  if(!name) return;
+  if((db.folders||[]).includes(name)){ toast('Folder already exists.', true); return; }
+  db.folders = [...(db.folders||[]), name];
+  setVal('new-folder-name','');
+  saveLocal();
+  renderAdminFolders();
+  toast(`Folder "${name}" added.`);
+}
+function deleteFolder(name) {
+  if(!confirm(`Delete folder "${name}"? Projects in it will become uncategorized.`)) return;
+  db.folders = (db.folders||[]).filter(f=>f!==name);
+  // Remove folder assignment from projects
+  (db.projects||[]).forEach(p=>{ if(p.folder===name) p.folder=''; });
+  saveLocal();
+  renderAdminFolders();
+  renderAdminProjects();
+  toast(`Folder "${name}" deleted.`);
+}
+function renderAdminFolders() {
+  const chips = el('admin-folder-chips');
+  const sel   = el('np-folder');
+  const folders = db.folders||[];
+  chips.innerHTML = folders.length
+    ? folders.map(f=>`<span class="folder-chip-del" onclick="deleteFolder('${h(f).replace(/'/g,"\\'")}')">📁 ${h(f)} <span class="x">×</span></span>`).join('')
+    : `<span style="font-size:12px;color:var(--muted);">No folders yet — add one above to organise projects.</span>`;
+  if(sel) {
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">— No folder —</option>' +
+      folders.map(f=>`<option value="${h(f)}" ${cur===f?'selected':''}>${h(f)}</option>`).join('');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
    PROJECTS
 ═══════════════════════════════════════════════════════ */
 function addProject(){
   const name = gVal('np-name').trim();
   if(!name){ toast('Enter a project name.', true); return; }
-  if(db.projects.length>=8){ toast('Max 8 projects.', true); return; }
   const lang  = gVal('np-lang').trim()||'Other';
   db.projects.push({
     id:     Date.now(),
@@ -1359,6 +1587,7 @@ function addProject(){
     lang,
     url:    gVal('np-url').trim()||'#',
     color:  LANG_COLORS[lang]||LANG_COLORS.Other,
+    folder: gVal('np-folder'),
     imgUrl: _pendingProjImg ? _pendingProjImg.dataUrl : null,
     imgSize:_pendingProjImg ? _pendingProjImg.size : 0,
   });
@@ -1372,7 +1601,9 @@ function deleteProject(id){
   saveLocal(); renderAdminProjects();
 }
 function renderAdminProjects(){
-  const list = el('a-proj-list');
+  const list  = el('a-proj-list');
+  const count = el('a-proj-count');
+  if(count) count.textContent = `${db.projects.length} project${db.projects.length!==1?'s':''} total`;
   if(!db.projects.length){ list.innerHTML=emptyState('🚀','No projects added yet. Fill the form above to add one.'); return; }
   list.innerHTML = db.projects.map(p=>`
     <div class="a-row" style="align-items:flex-start;gap:14px;">
@@ -1380,8 +1611,8 @@ function renderAdminProjects(){
         ? `<img src="${p.imgUrl}" style="width:80px;height:50px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border);" alt=""/>`
         : `<div style="width:80px;height:50px;border-radius:6px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🖼️</div>`}
       <div class="a-row-info" style="flex:1;">
-        <div class="a-row-name">${h(p.name)}</div>
-        <div class="a-row-meta">${h(p.lang)} · <a href="${h(p.url)}" target="_blank" style="color:var(--accent);font-size:11px;">${h(p.url.length>40?p.url.slice(0,40)+'…':p.url)}</a></div>
+        <div class="a-row-name">${h(p.name)} ${p.folder?`<span class="folder-chip">📁 ${h(p.folder)}</span>`:''}</div>
+        <div class="a-row-meta">${h(p.lang)} · <a href="${h(p.url)}" target="_blank" style="color:var(--accent);font-size:11px;">${h((p.url||'').length>40?(p.url||'').slice(0,40)+'…':(p.url||''))}</a></div>
         <div class="a-row-meta" style="margin-top:2px;">${h(p.desc||'')}</div>
       </div>
       <div class="a-row-actions">
@@ -1464,15 +1695,85 @@ function renderAdminEdu(){
    RENDER ALL ADMIN LISTS
 ═══════════════════════════════════════════════════════ */
 function renderAdminAll(){
+  renderAdminFolders();
   renderAdminSkills();
   renderAdminProjects();
   renderAdminExp();
   renderAdminEdu();
+  renderAdminResume();
 }
 
 /* ═══════════════════════════════════════════════════════
-   EXPORT
+   RESUME UPLOAD
 ═══════════════════════════════════════════════════════ */
+function handleResumeUpload(file){
+  if(!file) return;
+  if(file.type !== 'application/pdf'){ toast('Please upload a PDF file.', true); return; }
+  if(file.size > 5*1024*1024){ toast('PDF too large — keep under 5MB.', true); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    db.resume = {
+      name:       file.name,
+      size:       file.size,
+      dataUrl:    e.target.result,
+      uploadedAt: new Date().toISOString(),
+    };
+    saveLocal();
+    renderAdminResume();
+    toast('Resume uploaded! Export JSON to publish.');
+  };
+  reader.readAsDataURL(file);
+}
+
+function deleteResume(){
+  if(!confirm('Remove the uploaded resume?')) return;
+  db.resume = null;
+  saveLocal();
+  renderAdminResume();
+  toast('Resume removed.');
+}
+
+function renderAdminResume(){
+  const zone    = el('resume-zone');
+  const preview = el('resume-admin-preview');
+  if(!db.resume){
+    zone.style.display    = '';
+    preview.style.display = 'none';
+    return;
+  }
+  zone.style.display    = 'none';
+  preview.style.display = 'block';
+  el('resume-admin-name').textContent = db.resume.name;
+  el('resume-admin-meta').textContent = fmtBytes(db.resume.size) + ' · Uploaded ' + fmtDate(db.resume.uploadedAt);
+  const dlBtn = el('resume-admin-dl');
+  dlBtn.href     = db.resume.dataUrl;
+  dlBtn.download = db.resume.name;
+  el('resume-admin-iframe').src = db.resume.dataUrl;
+}
+
+function renderPubResume(){
+  const el2 = el('pub-resume');
+  if(!db.resume){
+    el2.innerHTML = emptyState('📄', 'No resume uploaded yet.');
+    return;
+  }
+  el2.innerHTML = `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);">
+        <span style="font-size:24px;">📄</span>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--text);">${h(db.resume.name)}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">${fmtBytes(db.resume.size)} · Updated ${fmtDate(db.resume.uploadedAt)}</div>
+        </div>
+        <a class="btn btn-green" href="${db.resume.dataUrl}" download="${h(db.resume.name)}" style="flex-shrink:0;">⬇ Download PDF</a>
+      </div>
+      <iframe src="${db.resume.dataUrl}"
+        style="width:100%;height:780px;border:none;display:block;background:#fff;"
+        title="Resume"></iframe>
+    </div>`;
+}
+
+
 function exportPortfolioJSON(){
   // Strip _localSavedAt so fresh loads treat it as canonical remote
   const out = { ...db };
@@ -1516,6 +1817,7 @@ function setupDrop(zoneId, handler){
 }
 setupDrop('rb-drop', importResumeBuilder);
 setupDrop('pf-drop', importPortfolioJSON);
+setupDrop('resume-zone', f => handleResumeUpload(f));
 
 /* ═══════════════════════════════════════════════════════
    UTILS
