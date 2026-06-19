@@ -1628,22 +1628,28 @@ function deleteFolder(name) {
   // Remove folder assignment from projects
   (db.projects||[]).forEach(p=>{ if(p.folder===name) p.folder=''; });
   saveLocal();
-  renderAdminFolders();
-  renderAdminProjects();
+  renderAdminFolders(); // also calls renderAdminProjects internally
   toast(`Folder "${name}" deleted.`);
 }
 function renderAdminFolders() {
   const chips = el('admin-folder-chips');
   const sel   = el('np-folder');
   const folders = db.folders||[];
+
+  // Update folder chip list (with delete buttons)
   chips.innerHTML = folders.length
     ? folders.map(f=>`<span class="folder-chip-del" onclick="deleteFolder('${h(f).replace(/'/g,"\\'")}')">📁 ${h(f)} <span class="x">×</span></span>`).join('')
     : `<span style="font-size:12px;color:var(--muted);">No folders yet — add one above to organise projects.</span>`;
+
+  // Update the "add project" form folder selector
   if(sel) {
     const cur = sel.value;
     sel.innerHTML = '<option value="">— No folder —</option>' +
       folders.map(f=>`<option value="${h(f)}" ${cur===f?'selected':''}>${h(f)}</option>`).join('');
   }
+
+  // Re-render project rows so their inline folder dropdowns pick up the new list
+  renderAdminProjects();
 }
 
 /* ═══════════════════════════════════════════════════════
