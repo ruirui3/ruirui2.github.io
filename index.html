@@ -495,10 +495,10 @@ footer {
       <span id="nav-name">Portfolio</span>
     </div>
     <div class="nav-links">
-      <button class="nav-link" onclick="showHome();setTimeout(()=>scrollSec('about-section'),80)">About</button>
+      <button class="nav-link" onclick="showHome(true);setTimeout(()=>scrollSec('about-section'),100)">About</button>
       <button class="nav-link" onclick="showProjectsPage('__all__')">Projects</button>
-      <button class="nav-link" onclick="showHome();setTimeout(()=>scrollSec('skills-section'),80)">Skills</button>
-      <button class="nav-link" onclick="showHome();setTimeout(()=>scrollSec('resume-section'),80)">Resume</button>
+      <button class="nav-link" onclick="showHome(true);setTimeout(()=>scrollSec('skills-section'),100)">Skills</button>
+      <button class="nav-link" onclick="showHome(true);setTimeout(()=>scrollSec('resume-section'),100)">Resume</button>
       <button class="btn btn-primary btn-sm" onclick="openLogin()">✏️ Edit</button>
     </div>
   </nav>
@@ -524,10 +524,10 @@ footer {
           <span id="pub-status">Available for opportunities</span>
         </div>
         <div class="hero-actions">
-          <button class="btn btn-green" onclick="showHome();setTimeout(()=>scrollSec('resume-section'),80)">📄 Resume</button>
+          <button class="btn btn-green" onclick="showHome(true);setTimeout(()=>scrollSec('resume-section'),100)">📄 Resume</button>
           <button class="btn btn-primary" onclick="showProjectsPage('__all__')">🚀 Projects</button>
-          <button class="btn btn-amber" onclick="showHome();setTimeout(()=>scrollSec('skills-section'),80)">⭐ Skills</button>
-          <button class="btn" style="background:rgba(155,114,207,.1);border-color:rgba(155,114,207,.4);color:var(--purple);" onclick="showHome();setTimeout(()=>scrollSec('exp-section'),80)">💼 Experience</button>
+          <button class="btn btn-amber" onclick="showHome(true);setTimeout(()=>scrollSec('skills-section'),100)">⭐ Skills</button>
+          <button class="btn" style="background:rgba(155,114,207,.1);border-color:rgba(155,114,207,.4);color:var(--purple);" onclick="showHome(true);setTimeout(()=>scrollSec('exp-section'),100)">💼 Experience</button>
         </div>
       </div>
     </div>
@@ -1115,10 +1115,10 @@ function renderPublicView() {
 ═══════════════════════════════════════════════════════ */
 let _activeFolder = '__all__';
 
-function showHome() {
+function showHome(andScroll) {
   document.getElementById('public-view').style.display = 'block';
   document.getElementById('projects-page').classList.remove('active');
-  window.scrollTo(0,0);
+  if(!andScroll) window.scrollTo(0,0);
 }
 
 function showProjectsPage(folder) {
@@ -1673,20 +1673,35 @@ function deleteProject(id){
   db.projects = db.projects.filter(p=>String(p.id)!==String(id));
   saveLocal(); renderAdminProjects();
 }
+function changeProjFolder(id, folder){
+  const p = db.projects.find(p=>String(p.id)===String(id));
+  if(p){ p.folder = folder; saveLocal(); toast('Folder updated.'); }
+}
 function renderAdminProjects(){
   const list  = el('a-proj-list');
   const count = el('a-proj-count');
   if(count) count.textContent = `${db.projects.length} project${db.projects.length!==1?'s':''} total`;
   if(!db.projects.length){ list.innerHTML=emptyState('🚀','No projects added yet. Fill the form above to add one.'); return; }
+  const folders = db.folders||[];
+  const folderOpts = '<option value="">— No folder —</option>' + folders.map(f=>`<option value="${h(f)}">${h(f)}</option>`).join('');
   list.innerHTML = db.projects.map(p=>`
     <div class="a-row" style="align-items:flex-start;gap:14px;">
       ${p.imgUrl
         ? `<img src="${p.imgUrl}" style="width:80px;height:50px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border);" alt=""/>`
         : `<div style="width:80px;height:50px;border-radius:6px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🖼️</div>`}
       <div class="a-row-info" style="flex:1;">
-        <div class="a-row-name">${h(p.name)} ${p.folder?`<span class="folder-chip">📁 ${h(p.folder)}</span>`:''}</div>
+        <div class="a-row-name">${h(p.name)}</div>
         <div class="a-row-meta">${h(p.lang)} · <a href="${h(p.url)}" target="_blank" style="color:var(--accent);font-size:11px;">${h((p.url||'').length>40?(p.url||'').slice(0,40)+'…':(p.url||''))}</a></div>
         <div class="a-row-meta" style="margin-top:2px;">${h(p.desc||'')}</div>
+        <div style="margin-top:8px;display:flex;align-items:center;gap:6px;">
+          <span style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;">Folder:</span>
+          <select style="padding:3px 8px;font-size:12px;border-radius:5px;width:auto;height:26px;"
+            onchange="changeProjFolder('${p.id}',this.value)">
+            ${folders.length
+              ? '<option value="">— None —</option>'+folders.map(f=>`<option value="${h(f)}" ${p.folder===f?'selected':''}>${h(f)}</option>`).join('')
+              : '<option value="">No folders — add one above</option>'}
+          </select>
+        </div>
       </div>
       <div class="a-row-actions">
         <button class="btn btn-sm btn-danger" onclick="deleteProject('${p.id}')">🗑</button>
@@ -1933,7 +1948,13 @@ function el(id){ return document.getElementById(id); }
 function gVal(id){ return (el(id)||{}).value||''; }
 function setVal(id,v){ const e=el(id); if(e) e.value=v||''; }
 function emptyState(icon,msg){ return `<div class="empty"><div class="empty-icon">${icon}</div><p>${msg}</p></div>`; }
-function scrollSec(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+function scrollSec(id){
+  // Use a small offset to account for sticky nav height (58px)
+  const el2 = document.getElementById(id);
+  if(!el2) return;
+  const top = el2.getBoundingClientRect().top + window.scrollY - 70;
+  window.scrollTo({top, behavior:'smooth'});
+}
 function fmtBytes(b){
   if(!b||b<0) return '—';
   if(b<1024) return b+' B';
